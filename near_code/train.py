@@ -78,7 +78,7 @@ def parse_args():
                         help="training epochs for neural programs")
     parser.add_argument('--symbolic_epochs', type=int, required=False, default=6,
                         help="training epochs for symbolic programs")
-    parser.add_argument('--lossfxn', type=str, required=True, choices=["crossentropy", "bcelogits"],
+    parser.add_argument('--lossfxn', type=str, required=True, choices=["crossentropy", "bcelogits", "mseloss"],
                         help="loss function for training")
     parser.add_argument('--class_weights', type=str, required=False, default = None,
                         help="weights for each class in the loss function, comma separated floats")
@@ -139,9 +139,12 @@ if __name__ == '__main__':
         valid_data = np.load(args.valid_data)
         valid_labels = np.load(args.valid_labels)
         assert valid_data.shape[-1] == args.input_size
-
+    
+    #TODO: fix this hack
+    is_classification = False if args.lossfxn == "mseloss" else True
     batched_trainset, validset, testset = prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, 
-        test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size)
+        test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size,
+        is_classification=is_classification)
 
     # TODO allow user to choose device
     if torch.cuda.is_available():
@@ -154,25 +157,33 @@ if __name__ == '__main__':
             lossfxn = nn.CrossEntropyLoss()
         elif args.lossfxn == "bcelogits":
             lossfxn = nn.BCEWithLogitsLoss()
+        elif args.lossfxn == "mseloss":
+            lossfxn = nn.MSELoss()
     else:
         class_weights = torch.tensor([float(w) for w in args.class_weights.split(',')])
         if args.lossfxn == "crossentropy":
             lossfxn = nn.CrossEntropyLoss(weight = class_weights)
         elif args.lossfxn == "bcelogits":
             lossfxn = nn.BCEWithLogitsLoss(weight = class_weights)
+        elif args.lossfxn == "mseloss":
+            lossfxn = nn.MSELoss()
 
 
     if device != 'cpu':
         lossfxn = lossfxn.cuda()
-
+    if not is_classification:
+        evalfxn = lossfxn
+    else:
+        evalfxn = label_correctness
     train_config = {
         'lr' : args.learning_rate,
         'neural_epochs' : args.neural_epochs,
         'symbolic_epochs' : args.symbolic_epochs,
         'optimizer' : optim.Adam,
         'lossfxn' : lossfxn,
-        'evalfxn' : label_correctness,
-        'num_labels' : args.num_labels
+        'evalfxn' : evalfxn,
+        'num_labels' : args.num_labels,
+        'is_classification': is_classification
     }
 
     # Initialize logging
@@ -221,6 +232,7 @@ if __name__ == '__main__':
     pickle.dump(best_program, open(os.path.join(save_path, "program.p"), "wb"))
 
     # Evaluate best program on test set
-    test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device)
+    test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device,
+                  is_classification=is_classification, evalfxn=evalfxn)
     log_and_print("ALGORITHM END \n\n")
     

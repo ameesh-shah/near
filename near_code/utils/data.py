@@ -4,7 +4,9 @@ import numpy as np
 from collections.abc import Iterable
 
 
-def flatten_batch(batch):
+def flatten_batch(batch, is_atom=False, is_classification=True):
+    if not is_classification:
+        return np.array(batch)
     if not isinstance(batch[0], Iterable) or len(batch[0]) == 1:
         return batch
     new_batch = []
@@ -41,7 +43,7 @@ def unpad_minibatch(minibatch, lengths, listtoatom=False):
             new_minibatch.append(minibatch[idx][:length])
     return new_minibatch
 
-def dataset_tolists(trajs, labels):
+def dataset_tolists(trajs, labels, is_classification=False):
     assert len(trajs) == len(labels)
 
     dataset = []
@@ -49,8 +51,10 @@ def dataset_tolists(trajs, labels):
         traj_list = []
         for t in range(len(traj)):
             traj_list.append(traj[t])
-
-        label = torch.tensor(labels[k]).long()
+        if is_classification:
+            label = torch.tensor(labels[k]).long()
+        else:
+            label = labels[k]
         dataset.append([traj_list, label])
 
     return dataset
@@ -97,15 +101,16 @@ def create_minibatches(all_items, batch_size):
             batches.append(batch)
     return batches
 
-def prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, test_labels, normalize=True, train_valid_split=0.7, batch_size=32):
+def prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, test_labels, 
+                     normalize=True, train_valid_split=0.7, batch_size=32, is_classification=True):
     if normalize:
         train_data, valid_data, test_data = normalize_data(train_data, valid_data, test_data)
 
-    trainset = dataset_tolists(train_data, train_labels) 
-    testset = dataset_tolists(test_data, test_labels)
+    trainset = dataset_tolists(train_data, train_labels, is_classification=is_classification) 
+    testset = dataset_tolists(test_data, test_labels, is_classification=is_classification)
 
     if valid_data is not None and valid_labels is not None:
-        validset = dataset_tolists(valid_data, valid_labels)
+        validset = dataset_tolists(valid_data, valid_labels, is_classification=is_classification)
     # Split training for validation set if validation set is not provided.
     elif train_valid_split < 1.0:
         split = int(train_valid_split*len(train_data))

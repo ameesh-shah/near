@@ -10,16 +10,22 @@ from utils.logging import log_and_print, print_program
 from utils.training import process_batch
 
 
-def test_set_eval(program, testset, output_type, output_size, num_labels, device='cpu', verbose=False):
+def test_set_eval(program, testset, output_type, output_size, num_labels, device='cpu', verbose=False,
+                  is_classification=True, evalfxn=None):
     log_and_print("\n")
     log_and_print("Evaluating program {} on TEST SET".format(print_program(program, ignore_constants=(not verbose))))
     with torch.no_grad():
         test_input, test_output = map(list, zip(*testset))
-        true_vals = torch.tensor(flatten_batch(test_output)).to(device)
+        true_vals = torch.tensor(flatten_batch(test_output, is_classification=is_classification)).to(device)
         predicted_vals = process_batch(program, test_input, output_type, output_size, device)
-        metric, additional_params = label_correctness(predicted_vals, true_vals, num_labels=num_labels)
-    log_and_print("F1 score achieved is {:.4f}".format(1 - metric))
-    log_and_print("Additional performance parameters: {}\n".format(additional_params))
+        if is_classification:
+            metric, additional_params = label_correctness(predicted_vals, true_vals, num_labels=num_labels)
+            log_and_print("F1 score achieved is {:.4f}".format(1 - metric))
+            log_and_print("Additional performance parameters: {}\n".format(additional_params))
+        else:
+            assert evalfxn is not None
+            metric = evalfxn(predicted_vals, true_vals)
+            log_and_print("Metric (MSE) achieved is {:.4f}".format(metric))
 
 def parse_args():
     parser = argparse.ArgumentParser()
