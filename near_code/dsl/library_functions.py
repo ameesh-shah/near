@@ -110,10 +110,13 @@ class MapPrefixesFunction(LibraryFunction):
 class ITE(LibraryFunction):
     """(Smoothed) If-The-Else."""
 
-    def __init__(self, input_type, output_type, input_size, output_size, num_units, eval_function=None, function1=None, function2=None, beta=1.0, name="ITE", simple=False):
+    def __init__(self, input_type, output_type, input_size, output_size, num_units, eval_function=None, function1=None, function2=None, beta=1.0, name="ITE", simple=False, ant=False):
         if eval_function is None:
             if simple:
-                eval_function = init_neural_function(input_type, "atom", input_size, 1, num_units)
+                if ant:
+                    eval_function = init_neural_function(input_type, "singleatom", input_size, 1, num_units)
+                else:
+                    eval_function = init_neural_function(input_type, "atom", input_size, 1, num_units)
             else:
                 eval_function = init_neural_function(input_type, "atom", input_size, output_size, num_units)
         if function1 is None:
@@ -161,6 +164,13 @@ class SimpleITE(ITE):
     def __init__(self, input_type, output_type, input_size, output_size, num_units, eval_function=None, function1=None, function2=None, beta=1.0):
         super().__init__(input_type, output_type, input_size, output_size, num_units, 
             eval_function=eval_function, function1=function1, function2=function2, beta=beta, name="SimpleITE", simple=True)
+
+class AntSimpleITE(ITE):
+    """The simple version of ITE evaluates one function for all dimensions of the output."""
+
+    def __init__(self, input_type, output_type, input_size, output_size, num_units, eval_function=None, function1=None, function2=None, beta=1.0):
+        super().__init__(input_type, output_type, input_size, output_size, num_units, 
+            eval_function=eval_function, function1=function1, function2=function2, beta=beta, name="AntSimpleITE", simple=True, ant=True)
         
 class MultiplyFunction(LibraryFunction):
 

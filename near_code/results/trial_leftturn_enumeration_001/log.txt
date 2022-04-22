@@ -1,0 +1,53 @@
+INFO:root:Starting experiment trial_leftturn_enumeration_001
+
+INFO:root:Symbolic Synthesis: generated 5/10 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/5) Start(FullFeatureSelect())
+INFO:root:Validation score is: 1.4962
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 5.093
+INFO:root:Total time elapsed is: 5.093
+INFO:root:New BEST program found:
+INFO:root:Start(FullFeatureSelect())
+INFO:root:struct_cost 0.0000 | score 1.4962 | path_cost 1.4962 | time 5.0940
+INFO:root:Training candidate program (2/5) Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:Validation score is: 1.4616
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 14.606
+INFO:root:Total time elapsed is: 19.701
+INFO:root:New BEST program found:
+INFO:root:Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:struct_cost 0.0300 | score 1.4616 | path_cost 1.4916 | time 19.7022
+INFO:root:Training candidate program (3/5) Start(SimpleITE(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:Validation score is: 0.2396
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 19.574
+INFO:root:Total time elapsed is: 39.279
+INFO:root:New BEST program found:
+INFO:root:Start(SimpleITE(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:struct_cost 0.0600 | score 0.2396 | path_cost 0.2996 | time 39.2805
+INFO:root:Training candidate program (4/5) Start(SimpleITE(FullFeatureSelect(), SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect()))
+INFO:root:Validation score is: 0.2549
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 17.817
+INFO:root:Total time elapsed is: 57.102
+INFO:root:Training candidate program (5/5) Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect())))
+INFO:root:Validation score is: 0.3396
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 25.059
+INFO:root:Total time elapsed is: 82.161
+INFO:root:
+
+INFO:root:BEST programs found:
+INFO:root:Start(FullFeatureSelect())
+INFO:root:struct_cost 0.0000 | score 1.4962 | path_cost 1.4962 | time 5.0940
+INFO:root:Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:struct_cost 0.0300 | score 1.4616 | path_cost 1.4916 | time 19.7022
+INFO:root:Start(SimpleITE(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:struct_cost 0.0600 | score 0.2396 | path_cost 0.2996 | time 39.2805
+INFO:root:
+
+INFO:root:Evaluating program Start(SimpleITE(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect(), FullFeatureSelect())) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.2308
+INFO:root:ALGORITHM END 
+
+

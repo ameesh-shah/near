@@ -1,0 +1,43 @@
+INFO:root:Starting experiment trial_rightturn_enumeration_001
+
+INFO:root:Symbolic Synthesis: generated 5/10 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/5) Start(FullFeatureSelect())
+INFO:root:Validation score is: 0.1212
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 6.293
+INFO:root:Total time elapsed is: 6.293
+INFO:root:New BEST program found:
+INFO:root:Start(FullFeatureSelect())
+INFO:root:struct_cost 0.0000 | score 0.1212 | path_cost 0.1212 | time 6.2936
+INFO:root:Training candidate program (2/5) Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:Validation score is: 0.1499
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 24.833
+INFO:root:Total time elapsed is: 31.128
+INFO:root:Training candidate program (3/5) Start(SimpleITE(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect(), FullFeatureSelect()))
+INFO:root:Validation score is: 0.1364
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 36.618
+INFO:root:Total time elapsed is: 67.746
+INFO:root:Training candidate program (4/5) Start(SimpleITE(FullFeatureSelect(), SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()), FullFeatureSelect()))
+INFO:root:Validation score is: 0.1452
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 38.031
+INFO:root:Total time elapsed is: 105.778
+INFO:root:Training candidate program (5/5) Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect())))
+INFO:root:Validation score is: 0.1389
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 37.364
+INFO:root:Total time elapsed is: 143.142
+INFO:root:
+
+INFO:root:BEST programs found:
+INFO:root:Start(FullFeatureSelect())
+INFO:root:struct_cost 0.0000 | score 0.1212 | path_cost 0.1212 | time 6.2936
+INFO:root:
+
+INFO:root:Evaluating program Start(FullFeatureSelect()) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.1177
+INFO:root:ALGORITHM END 
+
+

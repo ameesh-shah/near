@@ -17,6 +17,8 @@ def init_neural_function(input_type, output_type, input_size, output_size, num_u
         return ListToAtomModule(input_size, output_size, num_units)
     elif (input_type, output_type) == ("atom", "atom"):
         return AtomToAtomModule(input_size, output_size, num_units)
+    elif (input_type, output_type) == ("atom", "singleatom"):
+        return AtomToSingleAtomModule(input_size, output_size, num_units)
     else:
         raise NotImplementedError
 
@@ -77,6 +79,23 @@ class AtomToAtomModule(HeuristicNeuralFunction):
 
     def init_model(self):
         self.model = FeedForwardModule(self.input_size, self.output_size, self.num_units).to(device)
+
+    def execute_on_batch(self, batch, batch_lens=None):
+        assert len(batch.size()) == 2
+        model_out = self.model(batch)
+        assert len(model_out.size()) == 2
+        return model_out
+
+
+class AtomToSingleAtomModule(HeuristicNeuralFunction):
+
+    def __init__(self, input_size, output_size, num_units):
+        super().__init__("atom", "singleatom", input_size,
+                         output_size, num_units, "AtomToAtomModule")
+
+    def init_model(self):
+        self.model = FeedForwardModule(
+            self.input_size, self.output_size, self.num_units).to(device)
 
     def execute_on_batch(self, batch, batch_lens=None):
         assert len(batch.size()) == 2

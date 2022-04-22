@@ -13,7 +13,7 @@ from eval import test_set_eval
 from program_graph import ProgramGraph
 from utils.data import prepare_datasets
 from utils.evaluation import label_correctness
-from utils.logging import init_logging, print_program_dict, log_and_print
+from utils.logging import init_logging, print_program_dict, log_and_print, bring_to_cpu
 
 
 def parse_args():
@@ -39,9 +39,9 @@ def parse_args():
                         help="path to test labels")
     parser.add_argument('--valid_labels', type=str, required=False, default=None,
                         help="path to val labels. if this is not provided, we sample val from train.")     
-    parser.add_argument('--input_type', type=str, required=True, choices=["atom", "list"],
+    parser.add_argument('--input_type', type=str, required=True, choices=["atom", "fullatom", "list"],
                         help="input type of data")
-    parser.add_argument('--output_type', type=str, required=True, choices=["atom", "list"],
+    parser.add_argument('--output_type', type=str, required=True, choices=["atom", "fullatom", "list"],
                         help="output type of data")
     parser.add_argument('--input_size', type=int, required=True,
                         help="dimenion of features of each frame")
@@ -229,7 +229,7 @@ if __name__ == '__main__':
         best_program = best_programs[-1]["program"]
 
     # Save best program
-    pickle.dump(best_program, open(os.path.join(save_path, "program.p"), "wb"))
+    pickle.dump(best_program.submodules['program'], open(os.path.join(save_path, "program.p".format(args.exp_name)), "wb"))
 
     # Evaluate best program on test set
     test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device,

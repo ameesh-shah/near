@@ -1,0 +1,12 @@
+INFO:root:Starting experiment intersection_1_accel_enumeration_001
+
+INFO:root:Symbolic Synthesis: generated 5/10 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/5) Start(FullFeatureSelect())
+INFO:root:Validation score is: 2.6544
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 4.870
+INFO:root:Total time elapsed is: 4.870
+INFO:root:New BEST program found:
+INFO:root:Start(FullFeatureSelect())
+INFO:root:struct_cost 0.0000 | score 2.6544 | path_cost 2.6544 | time 4.8709
+INFO:root:Training candidate program (2/5) Start(SimpleITE(FullFeatureSelect(), FullFeatureSelect(), FullFeatureSelect()))

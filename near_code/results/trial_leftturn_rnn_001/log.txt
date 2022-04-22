@@ -1,0 +1,15 @@
+INFO:root:Starting experiment trial_leftturn_rnn_001
+
+INFO:root:Root node is Start(ListToListModule) or Start(ListToAtomModule), both implemented with an RNN.
+INFO:root:Be sure to set neural_epochs and max_num_units accordingly.
+
+INFO:root:Training RNN baseline with 16 LSTM units ...
+INFO:root:Validation score is: 0.2521
+INFO:root:Score of RNN is 0.7479
+INFO:root:
+
+INFO:root:Evaluating program Start(AtomToAtomModule) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.2460
+INFO:root:ALGORITHM END 
+
+

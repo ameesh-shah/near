@@ -1,0 +1,133 @@
+INFO:root:Starting experiment ant_trial_enumeration_001
+
+INFO:root:Symbolic Synthesis: generated 36/20 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/20) Start(AntUpPrimitive())
+INFO:root:Validation score is: 0.2512
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 3.043
+INFO:root:Total time elapsed is: 3.043
+INFO:root:New BEST program found:
+INFO:root:Start(AntUpPrimitive())
+INFO:root:struct_cost 0.0000 | score 0.2512 | path_cost 0.2512 | time 3.0444
+INFO:root:Training candidate program (2/20) Start(AntDownPrimitive())
+INFO:root:Validation score is: 0.5875
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 3.053
+INFO:root:Total time elapsed is: 6.098
+INFO:root:Training candidate program (3/20) Start(AntLeftPrimitive())
+INFO:root:Validation score is: 0.1588
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 3.036
+INFO:root:Total time elapsed is: 9.134
+INFO:root:New BEST program found:
+INFO:root:Start(AntLeftPrimitive())
+INFO:root:struct_cost 0.0000 | score 0.1588 | path_cost 0.1588 | time 9.1351
+INFO:root:Training candidate program (4/20) Start(AntRightPrimitive())
+INFO:root:Validation score is: 0.3846
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 3.032
+INFO:root:Total time elapsed is: 12.168
+INFO:root:Training candidate program (5/20) Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntUpPrimitive()))
+INFO:root:Validation score is: 0.2512
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.701
+INFO:root:Total time elapsed is: 18.869
+INFO:root:Training candidate program (6/20) Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntDownPrimitive()))
+INFO:root:Validation score is: 0.2062
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.675
+INFO:root:Total time elapsed is: 25.544
+INFO:root:Training candidate program (7/20) Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntLeftPrimitive()))
+INFO:root:Validation score is: 0.0118
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.745
+INFO:root:Total time elapsed is: 32.289
+INFO:root:New BEST program found:
+INFO:root:Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntLeftPrimitive()))
+INFO:root:struct_cost 0.0300 | score 0.0118 | path_cost 0.0418 | time 32.2922
+INFO:root:Training candidate program (8/20) Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntRightPrimitive()))
+INFO:root:Validation score is: 0.2196
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.474
+INFO:root:Total time elapsed is: 38.768
+INFO:root:Training candidate program (9/20) Start(AntSimpleITE(PositionSelect(), AntDownPrimitive(), AntUpPrimitive()))
+INFO:root:Validation score is: 0.2062
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.595
+INFO:root:Total time elapsed is: 45.363
+INFO:root:Training candidate program (10/20) Start(AntSimpleITE(PositionSelect(), AntDownPrimitive(), AntDownPrimitive()))
+INFO:root:Validation score is: 0.5875
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.417
+INFO:root:Total time elapsed is: 51.780
+INFO:root:Training candidate program (11/20) Start(AntSimpleITE(PositionSelect(), AntDownPrimitive(), AntLeftPrimitive()))
+INFO:root:Validation score is: 0.1318
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.777
+INFO:root:Total time elapsed is: 58.557
+INFO:root:Training candidate program (12/20) Start(AntSimpleITE(PositionSelect(), AntDownPrimitive(), AntRightPrimitive()))
+INFO:root:Validation score is: 0.3346
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.758
+INFO:root:Total time elapsed is: 65.315
+INFO:root:Training candidate program (13/20) Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntUpPrimitive()))
+INFO:root:Validation score is: 0.0110
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.604
+INFO:root:Total time elapsed is: 71.920
+INFO:root:New BEST program found:
+INFO:root:Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntUpPrimitive()))
+INFO:root:struct_cost 0.0300 | score 0.0110 | path_cost 0.0410 | time 71.9231
+INFO:root:Training candidate program (14/20) Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntDownPrimitive()))
+INFO:root:Validation score is: 0.1320
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.578
+INFO:root:Total time elapsed is: 78.502
+INFO:root:Training candidate program (15/20) Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntLeftPrimitive()))
+INFO:root:Validation score is: 0.1588
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.701
+INFO:root:Total time elapsed is: 85.203
+INFO:root:Training candidate program (16/20) Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntRightPrimitive()))
+INFO:root:Validation score is: 0.1008
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.527
+INFO:root:Total time elapsed is: 91.731
+INFO:root:Training candidate program (17/20) Start(AntSimpleITE(PositionSelect(), AntRightPrimitive(), AntUpPrimitive()))
+INFO:root:Validation score is: 0.2196
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.600
+INFO:root:Total time elapsed is: 98.330
+INFO:root:Training candidate program (18/20) Start(AntSimpleITE(PositionSelect(), AntRightPrimitive(), AntDownPrimitive()))
+INFO:root:Validation score is: 0.3345
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.681
+INFO:root:Total time elapsed is: 105.011
+INFO:root:Training candidate program (19/20) Start(AntSimpleITE(PositionSelect(), AntRightPrimitive(), AntLeftPrimitive()))
+INFO:root:Validation score is: 0.1004
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.720
+INFO:root:Total time elapsed is: 111.732
+INFO:root:Training candidate program (20/20) Start(AntSimpleITE(PositionSelect(), AntRightPrimitive(), AntRightPrimitive()))
+INFO:root:Validation score is: 0.3846
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 6.127
+INFO:root:Total time elapsed is: 117.859
+INFO:root:
+
+INFO:root:BEST programs found:
+INFO:root:Start(AntUpPrimitive())
+INFO:root:struct_cost 0.0000 | score 0.2512 | path_cost 0.2512 | time 3.0444
+INFO:root:Start(AntLeftPrimitive())
+INFO:root:struct_cost 0.0000 | score 0.1588 | path_cost 0.1588 | time 9.1351
+INFO:root:Start(AntSimpleITE(PositionSelect(), AntUpPrimitive(), AntLeftPrimitive()))
+INFO:root:struct_cost 0.0300 | score 0.0118 | path_cost 0.0418 | time 32.2922
+INFO:root:Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntUpPrimitive()))
+INFO:root:struct_cost 0.0300 | score 0.0110 | path_cost 0.0410 | time 71.9231
+INFO:root:
+
+INFO:root:Evaluating program Start(AntSimpleITE(PositionSelect(), AntLeftPrimitive(), AntUpPrimitive())) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.0058
+INFO:root:ALGORITHM END 
+
+

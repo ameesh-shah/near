@@ -23,6 +23,8 @@ def init_optimizer(program, optimizer, lr):
         else:
             for submodule, functionclass in current_function.submodules.items():
                 queue.append(functionclass)
+    if len(all_params) == 0:
+        return None
     curr_optim = optimizer(all_params, lr)
     return curr_optim
 
@@ -47,12 +49,12 @@ def process_batch(program, batch, output_type, output_size, device='cpu'):
         batch_input = torch.tensor(batch)
         batch_in = torch.tensor(batch_input).float().to(device)
         batch_out = program.execute_on_batch(batch_in, None)
-        if output_size == 1 or output_type == "list":
-            return flatten_tensor(batch_out).squeeze()
-        else:
-            if isinstance(batch_out, list):
-                batch_out = torch.cat(batch_out, dim=0).to(device)          
-            return batch_out
+        # if output_size == 1 or output_type == "list":
+        #     return flatten_tensor(batch_out).squeeze()
+        # else:
+        if isinstance(batch_out, list):
+            batch_out = torch.cat(batch_out, dim=0).to(device)          
+        return batch_out
 
 
 
@@ -95,9 +97,11 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
                 true_vals = true_vals.long()
             #print(predicted_vals.shape, true_vals.shape)
             loss = lossfxn(predicted_vals, true_vals)
-            curr_optim.zero_grad()
-            loss.backward()
-            curr_optim.step()
+            if curr_optim is not None:
+                #TODO: hacky solution to dealing with parameter-less programs
+                curr_optim.zero_grad()
+                loss.backward()
+                curr_optim.step()
 
             # if batchidx % print_every == 0 or batchidx == 0:
             #     log_and_print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch, num_epochs, loss.item()))

@@ -1,5 +1,6 @@
 import logging
 import os
+from queue import Empty
 import dsl
 
 
@@ -18,7 +19,7 @@ def log_and_print(line):
     print(line)
     logging.info(line)
 
-def print_program(program, ignore_constants=True):
+def print_program(program, ignore_constants=False):
     if not isinstance(program, dsl.LibraryFunction):
         return program.name
     else:
@@ -36,3 +37,18 @@ def print_program_dict(prog_dict):
     log_and_print(print_program(prog_dict["program"], ignore_constants=True))
     log_and_print("struct_cost {:.4f} | score {:.4f} | path_cost {:.4f} | time {:.4f}".format(
         prog_dict["struct_cost"], prog_dict["score"], prog_dict["path_cost"], prog_dict["time"]))
+
+def bring_to_cpu(program):
+    # given a program, send the parameters back to the cpu for ease at inference time
+    q = [program]
+    while len(q) > 0: # while it's not empty, bfs
+        curr_mod = q.pop()
+        for submodule, functionclass in curr_mod.submodules.items():
+            # add submodules to the queue
+            q.append(functionclass)
+        if curr_mod.has_params:
+            breakpoint()
+            # bring parameters back to cpu
+            for param_name, param in curr_mod.parameters.items():
+                curr_mod.parameters[param_name] = param.to('cpu')
+    breakpoint()
