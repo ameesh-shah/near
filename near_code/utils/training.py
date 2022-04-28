@@ -8,6 +8,50 @@ import dsl
 from utils.data import pad_minibatch, unpad_minibatch, flatten_tensor, flatten_batch
 from utils.logging import log_and_print
 
+# TODO allow user to choose device
+if torch.cuda.is_available():
+    device = 'cuda:0'
+else:
+    device = 'cpu'
+
+class GANDiscriminator(nn.Module):
+
+    def __init__(self, input_size, num_units, num_layers=1):
+        super(GANDiscriminator, self).__init__()
+        self.input_size = input_size
+        self.output_size = 1
+        self.rnn_size = num_units
+        self.num_layers = num_layers
+        self.rnn = nn.LSTM(self.input_size, self.rnn_size, num_layers=self.num_layers)
+        self.out_layer = nn.Linear(self.rnn_size, self.output_size)
+
+    def init_hidden(self, batch_size):
+        ahid = torch.zeros(self.num_layers, batch_size, self.rnn_size)
+        bhid = torch.zeros(self.num_layers, batch_size, self.rnn_size)
+        ahid = ahid.requires_grad_(True)
+        bhid = bhid.requires_grad_(True)
+        hid = (ahid.to(device), bhid.to(device))
+        return hid
+
+    def forward(self, batch, batch_lens):
+        assert isinstance(batch, torch.Tensor)
+        batch_size, seq_len, feature_dim = batch.size()
+
+        # pass through rnn
+        hidden = self.init_hidden(batch_size)
+        batch_packed = torch.nn.utils.rnn.pack_padded_sequence(batch, batch_lens, batch_first=True, enforce_sorted=False)
+        self.rnn.flatten_parameters()
+        out, hidden = self.rnn(batch_packed, hidden)
+        out, _ = torch.nn.utils.rnn.pad_packed_sequence(out, batch_first=True)
+
+        # pass through linear layer
+        out = out.contiguous()
+        out = out.view(-1, out.shape[2])
+        out = self.out_layer(out)
+        out = out.view(batch_size, seq_len, -1)
+
+        return out
+
 
 def init_optimizer(program, optimizer, lr):
     queue = [program]
@@ -27,6 +71,22 @@ def init_optimizer(program, optimizer, lr):
         return None
     curr_optim = optimizer(all_params, lr)
     return curr_optim
+
+def process_feedback_batch(program, env, batch_size, device='cpu'):
+    #TODO: vectorize this implementation, if possible
+    trajectories = []
+    # generate trajectories, using the env.
+    for trajectory in batch_size:
+        current_state = env.reset()
+        current_traj = [current_state]
+        done = False
+        while not done:
+            action = program.execute_on_single(current_state)
+            current_state, rew, done, info = env.step(action)
+            current_traj.append(current_state)
+        trajectories.append(torch.tensor(current_traj))
+    # evaluate the collected trajectories
+    return trajectories 
 
 def process_batch(program, batch, output_type, output_size, device='cpu'):
     if len(torch.tensor(batch[0]).size()) > 1:
@@ -57,7 +117,16 @@ def process_batch(program, batch, output_type, output_size, device='cpu'):
         return batch_out
 
 
-
+def execute_and_train_in_feedback(program, env, discriminator, train_config, output_size,
+    device='cpu', print_every=60):
+    lr = train_config['lr']
+    neural_epochs = train_config['neural_epochs']
+    symbolic_epochs = train_config['symbolic_epochs']
+    optimizer = train_config['optimizer']
+    lossfxn = nn.BCELoss()
+    evalfxn = train_config['evalfxn']
+    num_labels = train_config['num_labels']
+    is_classification = train_config['is_classification']
 
 def execute_and_train(program, validset, trainset, train_config, output_type, output_size, 
     neural=False, device='cpu', use_valid_score=False, print_every=60):

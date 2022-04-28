@@ -45,6 +45,9 @@ class AntAffineFunction(LibraryFunction):
     def execute_on_batch(self, batch, batch_lens=None):
         assert len(batch.size()) == 2
         return self.linear_layer(batch)
+    
+    def execute_on_single(self, state):
+        return self.linear_layer(state)
 
 
 class AntAffineFeatureSelectionFunction(AntAffineFunction):
@@ -115,6 +118,11 @@ class AntBehaviorPrimitiveMovement(LibraryFunction):
         with torch.no_grad():
             new_batch = torch.index_select(batch, 1, self.obs_subset).to(device)
             return self.behavior_primitive.act(new_batch, deterministic=True, on_device=True)
+    
+    def execute_on_single(self, state):
+        with torch.no_grad():
+            new_ex = torch.index_select(state, 0, self.obs_subset).to(device)
+            return self.behavior_primitive.act(new_ex, deterministic=True, on_device=True)
 
 class AntUpPrimitiveFunction(AntBehaviorPrimitiveMovement):
 
