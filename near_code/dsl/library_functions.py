@@ -45,6 +45,9 @@ class StartFunction(LibraryFunction):
 
     def execute_on_batch(self, batch, batch_lens=None, batch_output=None, is_sequential=False):
         return self.submodules["program"].execute_on_batch(batch, batch_lens)
+
+    def execute_on_single(self, state, is_sequential=False):
+        return self.submodules["program"].execute_on_single(state)
             
 class FoldFunction(LibraryFunction):
 
@@ -171,6 +174,20 @@ class AntSimpleITE(ITE):
     def __init__(self, input_type, output_type, input_size, output_size, num_units, eval_function=None, function1=None, function2=None, beta=1.0):
         super().__init__(input_type, output_type, input_size, output_size, num_units, 
             eval_function=eval_function, function1=function1, function2=function2, beta=beta, name="AntSimpleITE", simple=True, ant=True)
+    
+    def execute_on_single(self, state):
+        predicted_eval = self.submodules["evalfunction"].execute_on_single(state)
+        predicted_function1 = self.submodules["function1"].execute_on_single(state)
+        predicted_function2 = self.submodules["function2"].execute_on_single(state)
+
+        gate = self.bsmooth(predicted_eval*self.beta)
+        if self.simple:
+            gate = gate.repeat(1, self.output_size)
+
+        assert gate.size() == predicted_function2.size() == predicted_function1.size()
+        ite_result = gate*predicted_function1 + (1.0 - gate)*predicted_function2
+
+        return ite_result
         
 class MultiplyFunction(LibraryFunction):
 

@@ -4,7 +4,7 @@ import time
 from .core import ProgramLearningAlgorithm
 from program_graph import ProgramGraph
 from utils.logging import log_and_print, print_program, print_program_dict
-from utils.training import execute_and_train
+from utils.training import execute_and_train, execute_and_train_generator
 
 
 class ENUMERATION(ProgramLearningAlgorithm):
@@ -14,7 +14,8 @@ class ENUMERATION(ProgramLearningAlgorithm):
 
     def run(self, graph, trainset, validset, train_config, device, verbose=False):
         assert isinstance(graph, ProgramGraph)
-
+        is_generative = train_config["is_generative"]
+        env = train_config["environment"]
         symbolic_programs = []
         enum_depth = 1
         while len(symbolic_programs) < self.max_num_programs:
@@ -43,8 +44,12 @@ class ENUMERATION(ProgramLearningAlgorithm):
             log_and_print("Training candidate program ({}/{}) {}".format(
                 num_programs_trained, total_eval, print_program(candidate, ignore_constants=(not verbose))))
             num_programs_trained += 1
-            score = execute_and_train(candidate, validset, trainset, train_config, 
-                graph.output_type, graph.output_size, neural=False, device=device)
+            if is_generative:
+                score = execute_and_train_generator(candidate, trainset, env, train_config, graph.output_size,
+                 device=device)
+            else:
+                score = execute_and_train(candidate, validset, trainset, train_config, 
+                    graph.output_type, graph.output_size, neural=False, device=device)
 
             total_cost = score + prog_dict["struct_cost"]
             log_and_print("Structural cost is {} with structural penalty {}".format(prog_dict["struct_cost"], graph.penalty))

@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from .neural_functions import init_neural_function
-from .library_functions import AffineFeatureSelectionFunction, AffineFunction, LibraryFunction, SimpleITE
+from .library_functions import AffineFeatureSelectionFunction, AffineFunction, LibraryFunction, SimpleITE, AntSimpleITE
 import os
 
 ANT_MODELS = []
@@ -11,14 +11,23 @@ for direction in ['up', 'down', 'left', 'right']:
     filename = os.getcwd() + '/prl_code/primitives/ant/' + direction + '.pt'
     ANT_MODELS.append(torch.load(filename))
 
+# behaviors in ant models: up, down, left, right
+
 INTERSECTION_FEATURE_SUBSETS = {
     "position": torch.LongTensor([0, 1]),
-    "goal_pos": torch.LongTensor([113, 114]),
-    "all_pos": torch.LongTensor([0, 1, 113, 114]),
+    "all_goal_pos": torch.LongTensor([113, 114, 115, 116, 117, 118]),
+    "all_pos": torch.LongTensor([0, 1, 113, 114, 113, 114, 115, 116, 117, 118]),
+    "left_goal_pos": torch.LongTensor([113, 114]),
+    "up_goal_pos": torch.LongTensor([115, 116]),
+    "right_goal_pos": torch.LongTensor([117, 118]),
     "primitive_features": torch.LongTensor(range(2,113))
 }
-INTERSECTION_FULL_SIZE = 115
-
+LEFT_GOAL = torch.LongTensor([[6, -6]])
+UP_GOAL = torch.LongTensor([[12, 0]])
+RIGHT_GOAL = torch.LongTensor([[6, 6]])
+ALL_GOALS = [LEFT_GOAL, UP_GOAL, RIGHT_GOAL]
+INTERSECTION_FULL_SIZE = 119
+# goals (in order): left, up, right
 
 # TODO allow user to choose device
 if torch.cuda.is_available():
@@ -90,6 +99,11 @@ class AntAffineFeatureSelectionFunction(AntAffineFunction):
         remaining_features = batch[:, self.full_feature_dim:]
         return self.linear_layer(torch.cat([features, remaining_features], dim=-1))
 
+    def execute_on_single(self, state):
+        features = torch.index_select(state, 0, self.feature_tensor)
+        remaining_features = state[:, self.full_feature_dim:]
+        return self.linear_layer(torch.cat([features, remaining_features], dim=-1))
+
 class AntPositionSelection(AntAffineFeatureSelectionFunction):
 
     def __init__(self, input_size, output_size, num_units):
@@ -143,3 +157,46 @@ class AntRightPrimitiveFunction(AntBehaviorPrimitiveMovement):
 
     def __init__(self, input_size, output_size, num_units):
         super().__init__(input_size, output_size, num_units, 3, "AntRightPrimitive")
+
+class MoveAntToClosestGoal(LibraryFunction):
+
+    def __init__(self, input_size, output_size, num_units):
+        submodules = {}
+        self.obs_subset = INTERSECTION_FEATURE_SUBSETS["primitive_features"].to(device)
+        self.position_subset = INTERSECTION_FEATURE_SUBSETS["position"]
+        self.left_goal = INTERSECTION_FEATURE_SUBSETS["left_goal_pos"].to(device)
+        self.up_goal = INTERSECTION_FEATURE_SUBSETS["up_goal_pos"].to(device)
+        self.right_goal = INTERSECTION_FEATURE_SUBSETS["right_goal_pos"].to(device)
+
+        super().__init__(submodules, "atom", "atom", input_size, output_size, num_units, name="AntToClosestGoal", has_params=False)
+    
+    def get_closest_goal(self, inp, is_batch=False):
+        # find the minimum goal
+        # compute distance from minimum
+        with torch.no_grad():
+            axis = 1 if is_batch else 0
+            current_pos = torch.index_select(inp, axis, self.obs_subset).to(device)
+            closest_goal_idx =  np.argmin([nn.functional.pairwise_distance(goal, current_pos).item() for goal in ALL_GOALS])
+            return ALL_GOALS[closest_goal_idx]
+
+    
+    def execute_on_batch(self, batch, batch_lens=None):
+        with torch.no_grad():
+            new_batch = torch.index_select(batch, 1, self.obs_subset).to(device)
+            return self.behavior_primitive.act(new_batch, deterministic=True, on_device=True)
+    
+    def execute_on_single(self, state):
+        with torch.no_grad():
+            current_goal = self.get_closest_goal(state)
+            curr_pos = torch.index_select(state, 0, self.position_subset).to(device)
+            if current_goal == UP_GOAL:
+                behavior_primitive = ANT_MODELS[0].to(device)
+            else:
+                if torch.abs(curr_pos[0] - current_goal[0]) > 1.0:  # if it's not in line on the y-axis
+                    behavior_primitive = ANT_MODELS[0] if curr_pos[0] < current_goal[0] else ANT_MODELS[1]
+                else:  # it's in line, so move it towards the goal
+                    behavior_primitive = ANT_MODELS[2] if current_goal == LEFT_GOAL else ANT_MODELS[3]
+                behavior_primitive = behavior_primitive.to(device)
+            new_ex = torch.index_select(state, 0, self.obs_subset).to(device)
+            return behavior_primitive.act(new_ex, deterministic=True, on_device=True)
+

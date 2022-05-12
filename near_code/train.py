@@ -11,9 +11,11 @@ from algorithms import ASTAR_NEAR, IDDFS_NEAR, MC_SAMPLING, MCTS, ENUMERATION, G
 from dsl_current import DSL_DICT, CUSTOM_EDGE_COSTS
 from eval import test_set_eval
 from program_graph import ProgramGraph
-from utils.data import prepare_datasets
+from utils.data import prepare_datasets, create_minibatches
 from utils.evaluation import label_correctness
 from utils.logging import init_logging, print_program_dict, log_and_print, bring_to_cpu
+from gym_envs.envs.cross_maze_ant import CrossMazeAntAllEnv
+
 
 
 def parse_args():
@@ -70,6 +72,10 @@ def parse_args():
                         " This is ignored if validation set is provided using valid_data and valid_labels.")
     parser.add_argument('--normalize', action='store_true', required=False, default=False,
                         help='whether or not to normalize the data')
+    parser.add_argument('--generative', type=bool, required=False, default=False,
+                        help="learn generative programs (in a probabilistic setting)")
+    parser.add_argument('--num_discriminator_units', type=int, required=False, default=10, 
+                        help="number of hidden units for discriminator network")   
     parser.add_argument('--batch_size', type=int, required=False, default=50, 
                         help="batch size for training set")
     parser.add_argument('-lr', '--learning_rate', type=float, required=False, default=0.02,
@@ -82,6 +88,8 @@ def parse_args():
                         help="loss function for training")
     parser.add_argument('--class_weights', type=str, required=False, default = None,
                         help="weights for each class in the loss function, comma separated floats")
+    parser.add_argument('--environment', type=str, required=False, default = "ant",
+                        help="string indicating which gym environment to be used in the generative setting.")
 
     # Args for algorithms
     parser.add_argument('--algorithm', type=str, required=True, 
@@ -115,6 +123,9 @@ def parse_args():
     parser.add_argument('--max_enum_depth', type=int, required=False, default=7,
                         help="max enumeration depth for genetic algorithm")
 
+    # args for generative modeling
+
+
     return parser.parse_args()
 
 
@@ -126,25 +137,31 @@ if __name__ == '__main__':
     save_path = os.path.join(args.save_dir, full_exp_name)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-
-    train_data = np.load(args.train_data)
-    test_data = np.load(args.test_data)
+    is_generative = args.generative
+    train_data = np.load(args.train_data, allow_pickle=True)
+    test_data = np.load(args.test_data, allow_pickle=True)
     valid_data = None
-    train_labels = np.load(args.train_labels)
-    test_labels = np.load(args.test_labels)
+    train_labels = np.load(args.train_labels, allow_pickle=True)
+    test_labels = np.load(args.test_labels, allow_pickle=True)
     valid_labels = None
-    assert train_data.shape[-1] == test_data.shape[-1] == args.input_size
+    if not is_generative:
+        assert train_data.shape[-1] == test_data.shape[-1] == args.input_size
 
-    if args.valid_data is not None and args.valid_labels is not None:
-        valid_data = np.load(args.valid_data)
-        valid_labels = np.load(args.valid_labels)
-        assert valid_data.shape[-1] == args.input_size
+        if args.valid_data is not None and args.valid_labels is not None:
+            valid_data = np.load(args.valid_data)
+            valid_labels = np.load(args.valid_labels)
+            assert valid_data.shape[-1] == args.input_size
     
     #TODO: fix this hack
     is_classification = False if args.lossfxn == "mseloss" else True
-    batched_trainset, validset, testset = prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, 
-        test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size,
-        is_classification=is_classification)
+    if not is_generative:
+        batched_trainset, validset, testset = prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, 
+            test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size,
+            is_classification=is_classification)
+    else:
+        batched_trainset = create_minibatches(all_items=train_data, batch_size=args.batch_size)
+        validset = None
+        testset = None
 
     # TODO allow user to choose device
     if torch.cuda.is_available():
@@ -167,7 +184,12 @@ if __name__ == '__main__':
             lossfxn = nn.BCEWithLogitsLoss(weight = class_weights)
         elif args.lossfxn == "mseloss":
             lossfxn = nn.MSELoss()
-
+    if args.environment == "ant":
+        env = CrossMazeAntAllEnv()
+    else:
+        env = None
+        print("Could Not Find gym environment!")
+        assert env is not None
 
     if device != 'cpu':
         lossfxn = lossfxn.cuda()
@@ -183,7 +205,11 @@ if __name__ == '__main__':
         'lossfxn' : lossfxn,
         'evalfxn' : evalfxn,
         'num_labels' : args.num_labels,
-        'is_classification': is_classification
+        'is_classification': is_classification,
+        'batch_size': args.batch_size,
+        'is_generative': is_generative,
+        'environment': env,
+        'num_discriminator_units': args.num_discriminator_units
     }
 
     # Initialize logging
@@ -235,4 +261,4 @@ if __name__ == '__main__':
     test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device,
                   is_classification=is_classification, evalfxn=evalfxn)
     log_and_print("ALGORITHM END \n\n")
-    
+
