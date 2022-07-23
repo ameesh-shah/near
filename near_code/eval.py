@@ -17,7 +17,7 @@ def test_set_eval(program, testset, output_type, output_size, num_labels, device
     with torch.no_grad():
         test_input, test_output = map(list, zip(*testset))
         true_vals = torch.tensor(flatten_batch(test_output, is_classification=is_classification)).to(device)
-        predicted_vals = process_batch(program, test_input, output_type, output_size, device)
+        predicted_vals, _ = process_batch(program, test_input, output_type, output_size, device)
         if is_classification:
             metric, additional_params = label_correctness(predicted_vals, true_vals, num_labels=num_labels)
             log_and_print("F1 score achieved is {:.4f}".format(1 - metric))

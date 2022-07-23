@@ -2,7 +2,7 @@ import dsl
 
 
 DSL_DICT = {
-    ('list', 'list'): [dsl.MapFunction, dsl.MapPrefixesFunction, dsl.SimpleITE],
+    ('list', 'list'): [dsl.MapFunction],
     ('list', 'atom'): [dsl.FoldFunction, dsl.SimpleITE],
     ('atom', 'atom'): [dsl.AntSimpleITE, dsl.mujocoant.AntUpPrimitiveFunction, dsl.mujocoant.AntDownPrimitiveFunction,
                        dsl.mujocoant.AntLeftPrimitiveFunction, dsl.mujocoant.AntRightPrimitiveFunction],

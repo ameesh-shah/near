@@ -73,7 +73,7 @@ def parse_args():
     parser.add_argument('--normalize', action='store_true', required=False, default=False,
                         help='whether or not to normalize the data')
     parser.add_argument('--generative', type=bool, required=False, default=False,
-                        help="learn generative programs (in a probabilistic setting)")
+                        help="learn generative programs")
     parser.add_argument('--num_discriminator_units', type=int, required=False, default=10, 
                         help="number of hidden units for discriminator network")   
     parser.add_argument('--batch_size', type=int, required=False, default=50, 
@@ -123,7 +123,6 @@ def parse_args():
     parser.add_argument('--max_enum_depth', type=int, required=False, default=7,
                         help="max enumeration depth for genetic algorithm")
 
-    # args for generative modeling
 
 
     return parser.parse_args()
@@ -137,31 +136,25 @@ if __name__ == '__main__':
     save_path = os.path.join(args.save_dir, full_exp_name)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    is_generative = args.generative
     train_data = np.load(args.train_data, allow_pickle=True)
     test_data = np.load(args.test_data, allow_pickle=True)
     valid_data = None
     train_labels = np.load(args.train_labels, allow_pickle=True)
     test_labels = np.load(args.test_labels, allow_pickle=True)
     valid_labels = None
-    if not is_generative:
-        assert train_data.shape[-1] == test_data.shape[-1] == args.input_size
+    #import pdb; pdb.set_trace()
+    assert train_data.shape[-1] == test_data.shape[-1] #== args.input_size
 
-        if args.valid_data is not None and args.valid_labels is not None:
-            valid_data = np.load(args.valid_data)
-            valid_labels = np.load(args.valid_labels)
-            assert valid_data.shape[-1] == args.input_size
+    if args.valid_data is not None and args.valid_labels is not None:
+        valid_data = np.load(args.valid_data)
+        valid_labels = np.load(args.valid_labels)
+        assert valid_data.shape[-1] == args.input_size
     
     #TODO: fix this hack
     is_classification = False if args.lossfxn == "mseloss" else True
-    if not is_generative:
-        batched_trainset, validset, testset = prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, 
-            test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size,
-            is_classification=is_classification)
-    else:
-        batched_trainset = create_minibatches(all_items=train_data, batch_size=args.batch_size)
-        validset = None
-        testset = None
+    batched_trainset, validset, testset = prepare_datasets(train_data, valid_data, test_data, train_labels, valid_labels, 
+        test_labels, normalize=args.normalize, train_valid_split=args.train_valid_split, batch_size=args.batch_size,
+        is_classification=is_classification)
 
     # TODO allow user to choose device
     if torch.cuda.is_available():
@@ -207,9 +200,9 @@ if __name__ == '__main__':
         'num_labels' : args.num_labels,
         'is_classification': is_classification,
         'batch_size': args.batch_size,
-        'is_generative': is_generative,
         'environment': env,
-        'num_discriminator_units': args.num_discriminator_units
+        'num_discriminator_units': args.num_discriminator_units,
+        'is_em': args.generative
     }
 
     # Initialize logging
