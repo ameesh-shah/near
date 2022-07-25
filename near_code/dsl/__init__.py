@@ -13,6 +13,5 @@ from .crim13 import Crim13PositionSelection, Crim13DistanceSelection, Crim13Dist
 from .fruitflies import FruitFlyWingSelection, FruitFlyRatioSelection, FruitFlyPositionalSelection, \
                         FruitFlyAngularSelection, FruitFlyLinearSelection
 from .basketball import BBallBallSelection, BBallOffenseSelection, BBallDefenseSelection
-from .control import ControlAdoSelection, ControlEgoSelection, ControlPositionSelection, ControlVelocitiesSelection
 from .mujocoant import AntPositionSelection, AntGoalPosSelection, AntUpPrimitiveFunction, AntDownPrimitiveFunction, \
     AntLeftPrimitiveFunction, AntRightPrimitiveFunction

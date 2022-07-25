@@ -14,7 +14,6 @@ from program_graph import ProgramGraph
 from utils.data import prepare_datasets, create_minibatches
 from utils.evaluation import label_correctness
 from utils.logging import init_logging, print_program_dict, log_and_print, bring_to_cpu
-from gym_envs.envs.cross_maze_ant import CrossMazeAntAllEnv
 
 
 
@@ -88,8 +87,6 @@ def parse_args():
                         help="loss function for training")
     parser.add_argument('--class_weights', type=str, required=False, default = None,
                         help="weights for each class in the loss function, comma separated floats")
-    parser.add_argument('--environment', type=str, required=False, default = "ant",
-                        help="string indicating which gym environment to be used in the generative setting.")
 
     # Args for algorithms
     parser.add_argument('--algorithm', type=str, required=True, 
@@ -142,7 +139,6 @@ if __name__ == '__main__':
     train_labels = np.load(args.train_labels, allow_pickle=True)
     test_labels = np.load(args.test_labels, allow_pickle=True)
     valid_labels = None
-    #import pdb; pdb.set_trace()
     assert train_data.shape[-1] == test_data.shape[-1] #== args.input_size
 
     if args.valid_data is not None and args.valid_labels is not None:
@@ -177,12 +173,6 @@ if __name__ == '__main__':
             lossfxn = nn.BCEWithLogitsLoss(weight = class_weights)
         elif args.lossfxn == "mseloss":
             lossfxn = nn.MSELoss()
-    if args.environment == "ant":
-        env = CrossMazeAntAllEnv()
-    else:
-        env = None
-        print("Could Not Find gym environment!")
-        assert env is not None
 
     if device != 'cpu':
         lossfxn = lossfxn.cuda()
@@ -200,7 +190,6 @@ if __name__ == '__main__':
         'num_labels' : args.num_labels,
         'is_classification': is_classification,
         'batch_size': args.batch_size,
-        'environment': env,
         'num_discriminator_units': args.num_discriminator_units,
         'is_em': args.generative
     }

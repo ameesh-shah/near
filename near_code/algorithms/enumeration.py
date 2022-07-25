@@ -14,7 +14,6 @@ class ENUMERATION(ProgramLearningAlgorithm):
     def run(self, graph, trainset, validset, train_config, device, verbose=False):
         assert isinstance(graph, ProgramGraph)
         is_em = train_config["is_em"]
-        env = train_config["environment"]
         symbolic_programs = []
         enum_depth = 1
         while len(symbolic_programs) < self.max_num_programs:
