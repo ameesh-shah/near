@@ -4,8 +4,8 @@ import numpy as np
 from collections.abc import Iterable
 
 
-def flatten_batch(batch, is_atom=False, is_classification=True):
-    if not is_classification:
+def flatten_batch(batch, is_atom=False, is_classification=True, is_em=False):
+    if not is_classification and not is_em:
         return np.array(batch)
     if not isinstance(batch[0], Iterable) or len(batch[0]) == 1:
         return batch

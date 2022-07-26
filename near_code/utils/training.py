@@ -44,7 +44,7 @@ def process_batch(program, batch, output_type, output_size, device='cpu', is_em=
         out_padded = program.execute_on_batch(batch_padded, batch_lens)
         out_unpadded = unpad_minibatch(out_padded, batch_lens, listtoatom=(program.output_type=='atom'))
         if output_size == 1 or output_type == "list":
-            return flatten_tensor(out_unpadded).squeeze()
+            return flatten_tensor(out_unpadded).squeeze(), batch_lens
         else:
             if isinstance(out_unpadded, list):
                 out_unpadded = torch.cat(out_unpadded, dim=0).to(device)          
@@ -54,9 +54,6 @@ def process_batch(program, batch, output_type, output_size, device='cpu', is_em=
         batch_input = torch.tensor(batch)
         batch_in = torch.tensor(batch_input).float().to(device)
         batch_out = program.execute_on_batch(batch_in, None)
-        # if output_size == 1 or output_type == "list":
-        #     return flatten_tensor(batch_out).squeeze()
-        # else:
         if isinstance(batch_out, list):
             batch_out = torch.cat(batch_out, dim=0).to(device)     
         return batch_out, None
@@ -81,7 +78,7 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
     # prepare validation set
     validation_input, validation_output = map(list, zip(*validset))
     #import pdb; pdb.set_trace()
-    validation_true_vals = torch.tensor(flatten_batch(validation_output, is_classification=is_classification)).float().to(device)
+    validation_true_vals = torch.tensor(flatten_batch(validation_output, is_classification=is_classification, is_em=em_train)).float().to(device)
     # TODO a little hacky, but easiest solution for now
     if isinstance(lossfxn, nn.CrossEntropyLoss):
         validation_true_vals = validation_true_vals.long()
@@ -93,7 +90,7 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
     for epoch in range(1, num_epochs+1):
         for batchidx in range(len(trainset)):
             batch_input, batch_output = map(list, zip(*trainset[batchidx]))
-            true_vals = torch.tensor(flatten_batch(batch_output, is_classification=is_classification)).float().to(device)
+            true_vals = torch.tensor(flatten_batch(batch_output, is_classification=is_classification, is_em=em_train)).float().to(device)
             predicted_vals, batch_lens = process_batch(program, batch_input, output_type, output_size, device)
             # TODO a little hacky, but easiest solution for now
             if isinstance(lossfxn, nn.CrossEntropyLoss):
@@ -112,10 +109,9 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
                         losses.append(lossfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
                         len_idx += traj_len
                         # softmax the losses
-                    batch_softmax_vals = torch.softmax(torch.tensor([loss.item() for loss in losses], requires_grad=False), dim=0)
-                    loss = torch.zeros(1, requires_grad=True)
-                    for loss_idx in range(len(losses)):
-                        loss += losses[loss_idx] * batch_softmax_vals[loss_idx]
+                    loss_tensor = torch.tensor(losses)
+                    batch_softmax_vals = torch.softmax(loss_tensor.detach(), dim=0)
+                    loss = torch.sum(loss_tensor * batch_softmax_vals, dim=0)
             else:        
                 loss = lossfxn(predicted_vals, true_vals)
             if curr_optim is not None:
