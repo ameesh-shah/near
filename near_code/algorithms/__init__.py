@@ -5,3 +5,4 @@ from .mcts import MCTS
 from .enumeration import ENUMERATION
 from .genetic import GENETIC
 from .rnn_baseline import RNN_BASELINE
+from .expectation_maximization import EXPECTATIONMAXIMIZATION

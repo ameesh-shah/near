@@ -1,4 +1,5 @@
 import argparse
+import enum
 import os
 import pickle
 import torch
@@ -7,7 +8,7 @@ import torch.optim as optim
 import numpy as np
 
 # import program_learning
-from algorithms import ASTAR_NEAR, IDDFS_NEAR, MC_SAMPLING, MCTS, ENUMERATION, GENETIC, RNN_BASELINE
+from algorithms import ASTAR_NEAR, IDDFS_NEAR, MC_SAMPLING, MCTS, ENUMERATION, GENETIC, RNN_BASELINE, EXPECTATIONMAXIMIZATION
 from dsl_current import DSL_DICT, CUSTOM_EDGE_COSTS
 from eval import test_set_eval
 from program_graph import ProgramGraph
@@ -71,8 +72,6 @@ def parse_args():
                         " This is ignored if validation set is provided using valid_data and valid_labels.")
     parser.add_argument('--normalize', action='store_true', required=False, default=False,
                         help='whether or not to normalize the data')
-    parser.add_argument('--generative', type=bool, required=False, default=False,
-                        help="learn generative programs")
     parser.add_argument('--num_discriminator_units', type=int, required=False, default=10, 
                         help="number of hidden units for discriminator network")   
     parser.add_argument('--batch_size', type=int, required=False, default=50, 
@@ -90,7 +89,7 @@ def parse_args():
 
     # Args for algorithms
     parser.add_argument('--algorithm', type=str, required=True, 
-                        choices=["mc-sampling", "mcts", "enumeration", "genetic", "astar-near", "iddfs-near", "rnn"],
+                        choices=["mc-sampling", "mcts", "enumeration", "genetic", "astar-near", "iddfs-near", "rnn", "em"],
                         help="the program learning algorithm to run")
     parser.add_argument('--frontier_capacity', type=int, required=False, default=float('inf'),
                         help="capacity of frontier for A*-NEAR and IDDFS-NEAR")
@@ -191,7 +190,6 @@ if __name__ == '__main__':
         'is_classification': is_classification,
         'batch_size': args.batch_size,
         'num_discriminator_units': args.num_discriminator_units,
-        'is_em': args.generative
     }
 
     # Initialize logging
@@ -219,11 +217,18 @@ if __name__ == '__main__':
             total_eval=args.total_eval, mutation_prob=args.mutation_prob, max_enum_depth=args.max_enum_depth)
     elif args.algorithm == "rnn":
         algorithm = RNN_BASELINE()
+    elif args.algorithm == "em":
+        enumerator = ENUMERATION(max_num_programs=args.max_num_programs)
+        #TODO: change this once an actual sampling algorithm is in place
+        fixed_program_set = enumerator.enumerate2depth(program_graph, args.max_enum_depth)
+        algorithm = EXPECTATIONMAXIMIZATION(initial_program_set=fixed_program_set)
     else:
         raise NotImplementedError
 
     # Run program learning algorithm
     best_programs = algorithm.run(program_graph, batched_trainset, validset, train_config, device)
+    if args.algorithm == "em":
+        best_programs, program_distribution = best_programs
 
     if args.algorithm == "rnn":
         # special case for RNN baseline
@@ -237,10 +242,16 @@ if __name__ == '__main__':
         best_program = best_programs[-1]["program"]
 
     # Save best program
-    pickle.dump(best_program.submodules['program'], open(os.path.join(save_path, "program.p".format(args.exp_name)), "wb"))
+    if args.algorithm == "em":
+        # collect programs
+        all_programs = [prog_dict["program"] for prog_dict in best_programs]
+        pickle.dump((all_programs, program_distribution), open(os.path.join(save_path, "program.p".format(args.exp_name)), "wb"))
+    else:
+        pickle.dump(best_program.submodules['program'], open(os.path.join(save_path, "program.p".format(args.exp_name)), "wb"))
 
     # Evaluate best program on test set
-    test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device,
-                  is_classification=is_classification, evalfxn=evalfxn)
+    if not args.algorithm == "em":
+        test_set_eval(best_program, testset, args.output_type, args.output_size, args.num_labels, device,
+                    is_classification=is_classification, evalfxn=evalfxn)
     log_and_print("ALGORITHM END \n\n")
 

@@ -109,7 +109,7 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
                         losses.append(lossfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
                         len_idx += traj_len
                         # softmax the losses
-                    loss_tensor = torch.tensor(losses)
+                    loss_tensor = torch.stack(losses)
                     batch_softmax_vals = torch.softmax(loss_tensor.detach(), dim=0)
                     loss = torch.sum(loss_tensor * batch_softmax_vals, dim=0)
             else:        
@@ -128,10 +128,25 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
         with torch.no_grad():
             predicted_vals, batch_lens = process_batch(program, validation_input, output_type, output_size, device)
             if is_classification:
+                
                 metric, additional_params = evalfxn(predicted_vals, validation_true_vals, num_labels=num_labels)
             else:
                 metric = evalfxn(predicted_vals, validation_true_vals)
-                additional_params = None
+                additional_params = {}
+                if em_train:
+                    # in expectation-maximization
+                    if output_type == "list":   
+                        len_idx = 0
+                        evals = []
+                        for traj_len in batch_lens:
+                            # TODO: speed this up by taking slices?
+                            if traj_len == 0:
+                                continue
+                            # calculate normalized losses per trajectory
+                            evals.append(evalfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
+                            len_idx += traj_len
+                            # softmax the losses
+                        additional_params["traj_evals"] = evals 
 
         if use_valid_score:
             if metric < best_metric:
@@ -151,5 +166,7 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
         log_and_print("Hamming accuracy is: {:.4f}".format(best_additional_params['hamming_accuracy']))
     else:
         log_and_print("Validation score is: {:.4f}".format(best_metric))
+    if em_train:
+        return best_metric, best_program, best_additional_params
     
     return best_metric
