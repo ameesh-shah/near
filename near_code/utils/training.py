@@ -1,5 +1,6 @@
 import copy
 from distutils.log import error
+from re import L
 from regex import R
 import torch
 import torch.nn as nn
@@ -58,6 +59,147 @@ def process_batch(program, batch, output_type, output_size, device='cpu', is_em=
             batch_out = torch.cat(batch_out, dim=0).to(device)     
         return batch_out, None
 
+def execute_and_train_set(programset, validset, trainset, train_config, output_type, output_size, 
+    neural=False, device='cpu', use_valid_score=False, em_train=False, print_every=60):
+    # TODO: consolidate this with execute_and_train, if possible.
+    lr = train_config['lr']
+    neural_epochs = train_config['neural_epochs']
+    symbolic_epochs = train_config['symbolic_epochs']
+    optimizer = train_config['optimizer']
+    lossfxn = train_config['lossfxn']
+    evalfxn = train_config['evalfxn']
+    num_labels = train_config['num_labels']
+    is_classification = train_config['is_classification']
+
+    num_epochs = neural_epochs if neural else symbolic_epochs
+
+    # initialize an optimizer for each program
+    optim_set = []
+    for program in programset:
+        optim_set.append(init_optimizer(program, optimizer, lr))
+
+    # prepare validation set
+    validation_input, validation_output = map(list, zip(*validset))
+    #import pdb; pdb.set_trace()
+    validation_true_vals = torch.tensor(flatten_batch(validation_output, is_classification=is_classification, is_em=em_train)).float().to(device)
+    # TODO a little hacky, but easiest solution for now
+    if isinstance(lossfxn, nn.CrossEntropyLoss):
+        validation_true_vals = validation_true_vals.long()
+
+    best_program_set = [None for _ in range(len(programset))]
+    best_metric_set = [float('inf') for _ in range(len(programset))]
+    best_additional_params_set = [{} for _ in range(len(programset))]
+
+    for epoch in range(1, num_epochs+1):
+        for batchidx in range(len(trainset)):
+            batch_input, batch_output = map(list, zip(*trainset[batchidx]))
+            true_vals = torch.tensor(flatten_batch(batch_output, is_classification=is_classification, is_em=em_train)).float().to(device)
+            program_losses = []
+            for program in programset:
+                # first, collect the losses for each program
+                predicted_vals, batch_lens = process_batch(program, batch_input, output_type, output_size, device)
+                # TODO a little hacky, but easiest solution for now
+                if isinstance(lossfxn, nn.CrossEntropyLoss):
+                    true_vals = true_vals.long()
+                #print(predicted_vals.shape, true_vals.shape)
+                # train a set of programs using expectation-maximization
+                if output_type == "list":   
+                    len_idx = 0
+                    losses = []
+                    for traj_len in batch_lens:
+                        # TODO: speed this up by taking slices?
+                        if traj_len == 0:
+                            continue
+                        # calculate normalized losses per trajectory
+                        # calculate normalized losses per *program*
+                        losses.append(lossfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
+                        len_idx += traj_len
+                        # softmax the losses
+                    loss_tensor = torch.stack(losses)
+                    # weight the trajectories against one another
+                    # TODO: do we need trajectory-weighting? (the commented out lines)
+                    # exp_loss_vals = 1 / torch.exp(loss_tensor.detach())
+                    # batch_softmax_vals = torch.softmax(exp_loss_vals, dim=0)
+                    # loss = torch.sum(loss_tensor * batch_softmax_vals, dim=0)
+                    program_losses.append(loss_tensor)
+                else:     
+                    #TODO: implement the atom case (should be a simplification of the list case!)   
+                    loss_val = lossfxn(predicted_vals, true_vals)
+            all_program_loss_tensor = torch.stack(program_losses).detach()
+            exp_loss_vals = 1 / torch.exp(all_program_loss_tensor)
+            program_softmax_vals = torch.softmax(exp_loss_vals, dim=0)
+            summed_program_losses = []
+            # do this iteratively in order to keep the losses separate
+            for loss_val_idx in range(len(program_losses)):
+                summed_program_losses.append(torch.sum(program_losses[loss_val_idx] * program_softmax_vals[loss_val_idx], dim=0))
+            # softmax the program losses depending on how well they each did in comparison
+            for program_idx in range(len(programset)):
+                curr_optim = optim_set[program_idx]
+                loss_val = summed_program_losses[program_idx]
+                if curr_optim is not None:
+                    #TODO: hacky solution to dealing with parameter-less programs
+                    curr_optim.zero_grad()
+                    loss_val.backward()
+                    curr_optim.step()
+
+
+            if batchidx % print_every == 0 or batchidx == 0:
+                log_and_print('Epoch [{}/{}]:'.format(epoch, num_epochs))
+                for progidx, loss_val in enumerate(summed_program_losses):
+                    log_and_print('\tLoss for program {} : {:.4f}'.format(progidx, loss_val.item()))
+
+        # check score on validation set
+        with torch.no_grad():
+            for program_idx in range(len(programset)):
+                program = programset[program_idx]
+                predicted_vals, batch_lens = process_batch(program, validation_input, output_type, output_size, device)
+                if is_classification:
+                    
+                    metric, additional_params = evalfxn(predicted_vals, validation_true_vals, num_labels=num_labels)
+                else:
+                    metric = evalfxn(predicted_vals, validation_true_vals)
+                    additional_params = {}
+                    
+                    # in expectation-maximization
+                    if output_type == "list":   
+                        len_idx = 0
+                        evals = []
+                        for traj_len in batch_lens:
+                            # TODO: speed this up by taking slices?
+                            if traj_len == 0:
+                                continue
+                            # calculate normalized losses per trajectory
+                            evals.append(evalfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
+                            len_idx += traj_len
+                        additional_params["traj_evals"] = evals 
+
+                if use_valid_score:
+                    if sum(metric) < sum(best_metric_set[program_idx]):
+                        best_program_set[program_idx] = copy.deepcopy(program)
+                        best_metric_set[program_idx] = metric
+                        best_additional_params_set[program_idx] = additional_params
+                else:
+                    best_program_set[program_idx] = copy.deepcopy(program)
+                    best_metric_set[program_idx] = metric
+                    best_additional_params_set[program_idx] = additional_params
+
+    # select model with best validation score
+    programset = copy.deepcopy(best_program_set)
+    for progidx in range(len(programset)):
+        log_and_print("EVALUATION FOR PROGRAM {}:".format(progidx + 1))
+        if is_classification:
+                log_and_print("Validation score is: {:.4f}".format(best_metric_set[progidx]))
+                log_and_print("Average f1-score is: {:.4f}".format(1 - best_metric_set[progidx]))
+                log_and_print("Hamming accuracy is: {:.4f}".format(best_additional_params_set[progidx]['hamming_accuracy']))
+        else:
+            log_and_print("Validation score is: {}".format(best_metric_set))
+    if em_train:
+        return best_metric_set, best_program_set, best_additional_params_set
+    
+    return best_metric_set
+
+
+
 def execute_and_train(program, validset, trainset, train_config, output_type, output_size, 
     neural=False, device='cpu', use_valid_score=False, em_train=False, print_every=60):
 
@@ -110,7 +252,9 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
                         len_idx += traj_len
                         # softmax the losses
                     loss_tensor = torch.stack(losses)
-                    batch_softmax_vals = torch.softmax(loss_tensor.detach(), dim=0)
+                    exp_loss_vals = 1 / torch.exp(loss_tensor.detach())
+                    batch_softmax_vals = torch.softmax(exp_loss_vals, dim=0)
+                    #loss = torch.sum(loss_tensor, dim=0)
                     loss = torch.sum(loss_tensor * batch_softmax_vals, dim=0)
             else:        
                 loss = lossfxn(predicted_vals, true_vals)
@@ -145,7 +289,6 @@ def execute_and_train(program, validset, trainset, train_config, output_type, ou
                             # calculate normalized losses per trajectory
                             evals.append(evalfxn(predicted_vals[len_idx:len_idx+traj_len], true_vals[len_idx:len_idx+traj_len]) / traj_len)
                             len_idx += traj_len
-                            # softmax the losses
                         additional_params["traj_evals"] = evals 
 
         if use_valid_score:
