@@ -3,6 +3,7 @@ import time
 import torch
 import numpy as np
 from .core import ProgramLearningAlgorithm
+from enumeration import ENUMERATION
 from program_graph import ProgramGraph
 from utils.logging import log_and_print, print_program, print_program_dict
 from utils.training import execute_and_train, execute_and_train_set
@@ -13,8 +14,14 @@ def probabilize(value_sequence):
 
 class EXPECTATIONMAXIMIZATION(ProgramLearningAlgorithm):
 
-    def __init__(self, initial_program_set):
-        self.full_program_set = initial_program_set
+    def __init__(self, program_generation_method="fixed"):
+        if program_generation_method == "fixed":
+            #TODO: un-hardcode this
+            self.enumerator = ENUMERATION(max_num_programs=100)
+            initial_program_set = self.enumerator.enumerate2depth()
+            self.full_program_set = initial_program_set
+        else:
+            raise NotImplementedError("Non-fixed generation methods for EM not yet implemented!")
     
     def run(self, graph, trainset, validset, train_config, device, verbose=False, train_in_set=True):
         # get the three program architectures that we're going to set

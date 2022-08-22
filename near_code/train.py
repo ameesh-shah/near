@@ -190,6 +190,7 @@ if __name__ == '__main__':
         'is_classification': is_classification,
         'batch_size': args.batch_size,
         'num_discriminator_units': args.num_discriminator_units,
+        'is_em': args.algorithm == "em",
     }
 
     # Initialize logging

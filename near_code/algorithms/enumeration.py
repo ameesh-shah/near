@@ -59,6 +59,8 @@ class ENUMERATION(ProgramLearningAlgorithm):
                 best_programs_list.append(prog_dict)
                 log_and_print("New BEST program found:")
                 print_program_dict(best_programs_list[-1])
+                print(best_program)
+                
 
         return best_programs_list
 

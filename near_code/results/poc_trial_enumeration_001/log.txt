@@ -1,0 +1,98 @@
+INFO:root:Starting experiment poc_trial_enumeration_001
+
+INFO:root:Symbolic Synthesis: generated 5/20 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/5) Start(Affine())
+INFO:root:Epoch [1/10], Loss: 1.8187
+INFO:root:Epoch [2/10], Loss: 1.4205
+INFO:root:Epoch [3/10], Loss: 1.0986
+INFO:root:Epoch [4/10], Loss: 0.8414
+INFO:root:Epoch [5/10], Loss: 0.6454
+INFO:root:Epoch [6/10], Loss: 0.5049
+INFO:root:Epoch [7/10], Loss: 0.4115
+INFO:root:Epoch [8/10], Loss: 0.3549
+INFO:root:Epoch [9/10], Loss: 0.3245
+INFO:root:Epoch [10/10], Loss: 0.3102
+INFO:root:Validation score is: 0.2896
+INFO:root:Structural cost is 0.0 with structural penalty 0.01
+INFO:root:Time to train child 0.045
+INFO:root:Total time elapsed is: 0.045
+INFO:root:New BEST program found:
+INFO:root:Start(Affine())
+INFO:root:struct_cost 0.0000 | score 0.2896 | path_cost 0.2896 | time 0.0459
+INFO:root:Training candidate program (2/5) Start(SimpleITE(Affine(), Affine(), Affine()))
+INFO:root:Epoch [1/10], Loss: 2.6375
+INFO:root:Epoch [2/10], Loss: 2.1156
+INFO:root:Epoch [3/10], Loss: 1.6763
+INFO:root:Epoch [4/10], Loss: 1.3038
+INFO:root:Epoch [5/10], Loss: 0.9965
+INFO:root:Epoch [6/10], Loss: 0.7528
+INFO:root:Epoch [7/10], Loss: 0.5698
+INFO:root:Epoch [8/10], Loss: 0.4433
+INFO:root:Epoch [9/10], Loss: 0.3671
+INFO:root:Epoch [10/10], Loss: 0.3313
+INFO:root:Validation score is: 0.4105
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 0.104
+INFO:root:Total time elapsed is: 0.152
+INFO:root:Training candidate program (3/5) Start(SimpleITE(Affine(), Affine(), SimpleITE(Affine(), Affine(), Affine())))
+INFO:root:Epoch [1/10], Loss: 0.7243
+INFO:root:Epoch [2/10], Loss: 0.5780
+INFO:root:Epoch [3/10], Loss: 0.4882
+INFO:root:Epoch [4/10], Loss: 0.4246
+INFO:root:Epoch [5/10], Loss: 0.3725
+INFO:root:Epoch [6/10], Loss: 0.3281
+INFO:root:Epoch [7/10], Loss: 0.2923
+INFO:root:Epoch [8/10], Loss: 0.2659
+INFO:root:Epoch [9/10], Loss: 0.2475
+INFO:root:Epoch [10/10], Loss: 0.2345
+INFO:root:Validation score is: 0.2183
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.119
+INFO:root:Total time elapsed is: 0.270
+INFO:root:New BEST program found:
+INFO:root:Start(SimpleITE(Affine(), Affine(), SimpleITE(Affine(), Affine(), Affine())))
+INFO:root:struct_cost 0.0600 | score 0.2183 | path_cost 0.2783 | time 0.2728
+INFO:root:Training candidate program (4/5) Start(SimpleITE(Affine(), SimpleITE(Affine(), Affine(), Affine()), Affine()))
+INFO:root:Epoch [1/10], Loss: 0.3574
+INFO:root:Epoch [2/10], Loss: 0.2887
+INFO:root:Epoch [3/10], Loss: 0.2859
+INFO:root:Epoch [4/10], Loss: 0.2807
+INFO:root:Epoch [5/10], Loss: 0.2678
+INFO:root:Epoch [6/10], Loss: 0.2569
+INFO:root:Epoch [7/10], Loss: 0.2507
+INFO:root:Epoch [8/10], Loss: 0.2469
+INFO:root:Epoch [9/10], Loss: 0.2436
+INFO:root:Epoch [10/10], Loss: 0.2407
+INFO:root:Validation score is: 0.2369
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.114
+INFO:root:Total time elapsed is: 0.394
+INFO:root:Training candidate program (5/5) Start(SimpleITE(SimpleITE(Affine(), Affine(), Affine()), Affine(), Affine()))
+INFO:root:Epoch [1/10], Loss: 0.5129
+INFO:root:Epoch [2/10], Loss: 0.3746
+INFO:root:Epoch [3/10], Loss: 0.3123
+INFO:root:Epoch [4/10], Loss: 0.2877
+INFO:root:Epoch [5/10], Loss: 0.2771
+INFO:root:Epoch [6/10], Loss: 0.2673
+INFO:root:Epoch [7/10], Loss: 0.2566
+INFO:root:Epoch [8/10], Loss: 0.2487
+INFO:root:Epoch [9/10], Loss: 0.2444
+INFO:root:Epoch [10/10], Loss: 0.2393
+INFO:root:Validation score is: 0.2275
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.128
+INFO:root:Total time elapsed is: 0.522
+INFO:root:
+
+INFO:root:BEST programs found:
+INFO:root:Start(Affine())
+INFO:root:struct_cost 0.0000 | score 0.2896 | path_cost 0.2896 | time 0.0459
+INFO:root:Start(SimpleITE(Affine(), Affine(), SimpleITE(Affine(), Affine(), Affine())))
+INFO:root:struct_cost 0.0600 | score 0.2183 | path_cost 0.2783 | time 0.2728
+INFO:root:
+
+INFO:root:Evaluating program Start(SimpleITE(Affine(), Affine(), SimpleITE(Affine(), Affine(), Affine()))) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.1858
+INFO:root:ALGORITHM END 
+
+

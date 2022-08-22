@@ -2,11 +2,7 @@ import dsl
 
 
 DSL_DICT = {
-    ('list', 'list'): [dsl.MapFunction],
-    ('list', 'atom'): [dsl.FoldFunction, dsl.SimpleITE],
-    ('atom', 'atom'): [dsl.AntSimpleITE, dsl.mujocoant.AntUpPrimitiveFunction, dsl.mujocoant.AntDownPrimitiveFunction,
-                       dsl.mujocoant.AntLeftPrimitiveFunction, dsl.mujocoant.AntRightPrimitiveFunction],
-    ('atom', 'singleatom'): [dsl.AntPositionSelection, dsl.AntGoalPosSelection]
+    ('atom', 'atom'): [dsl.POCAffine, dsl.SimpleITE],
 }
 
 CUSTOM_EDGE_COSTS = {

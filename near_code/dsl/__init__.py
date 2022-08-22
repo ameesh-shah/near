@@ -15,3 +15,5 @@ from .fruitflies import FruitFlyWingSelection, FruitFlyRatioSelection, FruitFlyP
 from .basketball import BBallBallSelection, BBallOffenseSelection, BBallDefenseSelection
 from .mujocoant import AntPositionSelection, AntGoalPosSelection, AntUpPrimitiveFunction, AntDownPrimitiveFunction, \
     AntLeftPrimitiveFunction, AntRightPrimitiveFunction
+
+from .poc import POCAffine
