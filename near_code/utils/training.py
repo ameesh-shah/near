@@ -124,7 +124,8 @@ def execute_and_train_set(programset, validset, trainset, train_config, output_t
                     program_losses.append(loss_tensor)
                 else:     
                     #TODO: implement the atom case (should be a simplification of the list case!)   
-                    loss_val = lossfxn(predicted_vals, true_vals)
+                    loss_tensor = torch.stack([lossfxn(predicted_vals[idx], true_vals[idx]) for idx in predicted_vals.shape[0]])
+                    program_losses.append(loss_tensor)
             all_program_loss_tensor = torch.stack(program_losses).detach()
             exp_loss_vals = 1 / torch.exp(all_program_loss_tensor)
             program_softmax_vals = torch.softmax(exp_loss_vals, dim=0)

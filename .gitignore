@@ -1,3 +1,5 @@
 near_code/dsl/__pycache__/*
 near_code/algorithms/__pycache__/*
 __pycache__/
+near_code/data/*
+near_code/gym_envs/__pycache__/*
