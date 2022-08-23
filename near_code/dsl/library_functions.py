@@ -48,6 +48,10 @@ class StartFunction(LibraryFunction):
 
     def execute_on_single(self, state, is_sequential=False):
         return self.submodules["program"].execute_on_single(state)
+
+    def print(self):
+        print("StartFunction")
+        self.program.print()
             
 class FoldFunction(LibraryFunction):
 
@@ -161,6 +165,13 @@ class ITE(LibraryFunction):
 
         return ite_result
 
+    def print(self):
+        cond = type(self.submodules["evalfunction"])
+        then = type(self.submodules["function1"])
+        els = type(self.submodules["function2"])
+        out = f"IF ({cond})\n\tTHEN {then}\n\tELSE {els}"
+        print(out)
+
 class SimpleITE(ITE):
     """The simple version of ITE evaluates one function for all dimensions of the output."""
 
@@ -261,6 +272,11 @@ class AffineFunction(LibraryFunction):
     def execute_on_batch(self, batch, batch_lens=None):
         assert len(batch.size()) == 2
         return self.linear_layer(batch)
+
+    def print(self):
+        affine = sum([f"x{i} * {w:.2f}"for i,w in enumerate(self.linear_layer.weight)], " +")
+        affine += f"{self.linear_layer.bias:.2f}"
+        print(affine)
 
 class AffineFeatureSelectionFunction(AffineFunction):
 

@@ -85,6 +85,9 @@ class AtomToAtomModule(HeuristicNeuralFunction):
         model_out = self.model(batch)
         assert len(model_out.size()) == 2
         return model_out
+    
+    def print(self):
+        self.model.print()
 
 
 class AtomToSingleAtomModule(HeuristicNeuralFunction):
@@ -102,6 +105,12 @@ class AtomToSingleAtomModule(HeuristicNeuralFunction):
         model_out = self.model(batch)
         assert len(model_out.size()) == 2
         return model_out
+
+    def print(self):
+        affine = sum([f"x{i} * {w:.2f}"for i,w in enumerate(self.linear_layer.weight)], " +")
+        affine += f"{self.linear_layer.bias:.2f}"
+        print(affine)
+
 
 
 ##############################
@@ -163,3 +172,9 @@ class FeedForwardModule(nn.Module):
         current = F.relu(self.first_layer(current_input))
         current = self.out_layer(current)
         return current
+
+    def print(self):
+        print(self.first_layer.weight.tolist())
+        affine = " + ".join([f"x{i} * {w[0]:.2f}"for i,w in enumerate(self.first_layer.weight.tolist())])
+        affine += f" + {self.first_layer.bias[0]:.2f}"
+        print(affine)
