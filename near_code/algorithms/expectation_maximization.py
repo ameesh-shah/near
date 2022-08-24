@@ -3,7 +3,7 @@ import time
 import torch
 import numpy as np
 from .core import ProgramLearningAlgorithm
-from enumeration import ENUMERATION
+from algorithms import ENUMERATION
 from program_graph import ProgramGraph
 from utils.logging import log_and_print, print_program, print_program_dict
 from utils.training import execute_and_train, execute_and_train_set

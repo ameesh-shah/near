@@ -1,4 +1,5 @@
 import copy
+import logging
 import time
 
 from .core import ProgramLearningAlgorithm
@@ -59,8 +60,8 @@ class ENUMERATION(ProgramLearningAlgorithm):
                 best_programs_list.append(prog_dict)
                 log_and_print("New BEST program found:")
                 print_program_dict(best_programs_list[-1])
-                best_program.print()
-                
+                import utils.logging
+                utils.logging.print_program(best_program)
 
         return best_programs_list
 
@@ -76,7 +77,6 @@ class ENUMERATION(ProgramLearningAlgorithm):
             assert not enumerated.get(program_name)
             enumerated[program_name] = True
             if graph.is_fully_symbolic(program_node.program):
-                print(program_name)
                 all_programs.append({
                         "program" : copy.deepcopy(program_node.program),
                         "struct_cost" : program_node.cost,
