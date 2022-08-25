@@ -61,19 +61,24 @@ def dataset_tolists(trajs, labels, is_classification=False):
 
 def normalize_data(train_data, valid_data, test_data):
     """Normalize features wrt. mean and std of training data."""
-    _, seq_len, input_dim = train_data.shape
-    train_data_reshape = np.reshape(train_data, (-1, input_dim))
-    test_data_reshape = np.reshape(test_data, (-1, input_dim))
-    features_mean = np.mean(train_data_reshape, axis=0)
-    features_std = np.std(train_data_reshape, axis=0)
-    train_data_reshape = (train_data_reshape - features_mean) / features_std
-    test_data_reshape = (test_data_reshape - features_mean) / features_std
-    train_data = np.reshape(train_data_reshape, (-1, seq_len, input_dim))
-    test_data = np.reshape(test_data_reshape, (-1, seq_len, input_dim))
+    if len(train_data.shape)==3:
+        _, seq_len, input_dim = train_data.shape
+        train_data = np.reshape(train_data, (-1, input_dim))
+        test_data = np.reshape(test_data, (-1, input_dim))
+    features_mean = np.mean(train_data, axis=0)
+    features_std = np.std(train_data, axis=0)
+    train_data = (train_data - features_mean) / features_std
+    test_data = (test_data - features_mean) / features_std
+    if len(train_data.shape)==3:
+        train_data = np.reshape(train_data, (-1, seq_len, input_dim))
+        test_data = np.reshape(test_data, (-1, seq_len, input_dim))
     if valid_data is not None:
-        valid_data_reshape = np.reshape(valid_data, (-1, input_dim))
-        valid_data_reshape = (valid_data_reshape - features_mean) / features_std
-        valid_data = np.reshape(valid_data_reshape, (-1, seq_len, input_dim))
+        if len(train_data.shape)==3:
+            valid_data = np.reshape(valid_data, (-1, input_dim))
+        valid_data = (valid_data - features_mean) / features_std
+        if len(train_data.shape)==3:
+            valid_data = np.reshape(valid_data, (-1, seq_len, input_dim))
+
     return train_data, valid_data, test_data
 
 def create_minibatches(all_items, batch_size):

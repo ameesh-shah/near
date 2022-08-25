@@ -2,7 +2,7 @@ import dsl
 
 
 DSL_DICT = {
-    ('atom', 'atom'): [dsl.POCAffine, dsl.SimpleITE],
+    ('atom', 'atom'): [dsl.POCAffine, dsl.POCITE1, dsl.POCITE2],
 }
 
 CUSTOM_EDGE_COSTS = {

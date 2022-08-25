@@ -10,7 +10,7 @@ from utils.logging import log_and_print, print_program
 from utils.training import process_batch
 
 
-def test_set_eval(program, testset, output_type, output_size, num_labels, device='cpu', verbose=False,
+def test_set_eval(program, testset, output_type, output_size, num_labels, device='cpu', verbose=True,
                   is_classification=True, evalfxn=None):
     log_and_print("\n")
     log_and_print("Evaluating program {} on TEST SET".format(print_program(program, ignore_constants=(not verbose))))

@@ -16,4 +16,4 @@ from .basketball import BBallBallSelection, BBallOffenseSelection, BBallDefenseS
 from .mujocoant import AntPositionSelection, AntGoalPosSelection, AntUpPrimitiveFunction, AntDownPrimitiveFunction, \
     AntLeftPrimitiveFunction, AntRightPrimitiveFunction
 
-from .poc import POCAffine
+from .poc import POCAffine, POCITE1, POCITE2

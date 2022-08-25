@@ -20,7 +20,7 @@ def init_neural_function(input_type, output_type, input_size, output_size, num_u
     elif (input_type, output_type) == ("atom", "singleatom"):
         return AtomToSingleAtomModule(input_size, output_size, num_units)
     else:
-        raise NotImplementedError
+        raise NotImplementedError(f"{input_type} -> {output_type} not implemented")
 
 
 class HeuristicNeuralFunction:

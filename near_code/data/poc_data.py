@@ -1,6 +1,6 @@
 import numpy as np
 
-PER_PROGRAM_TRAIN_SIZE = 200
+PER_PROGRAM_TRAIN_SIZE = 500
 PER_PROGRAM_TEST_SIZE = 50
 
 def generate_data(programs, range_lower_upper, SIZE, NAME):
@@ -21,6 +21,7 @@ def generate_data(programs, range_lower_upper, SIZE, NAME):
 if __name__ == '__main__':
     programs = [
         lambda x : np.where(x<1/3, x+1, x-1),
+        # lambda x : x+1,
         #lambda x : np.where(x>0,x,-x),
     ]
     range_lower_upper = [-1, 3]

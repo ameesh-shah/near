@@ -61,7 +61,8 @@ class ENUMERATION(ProgramLearningAlgorithm):
                 log_and_print("New BEST program found:")
                 print_program_dict(best_programs_list[-1])
                 import utils.logging
-                utils.logging.print_program(best_program)
+                program = utils.logging.print_program(best_program)
+                print(program)
 
         return best_programs_list
 

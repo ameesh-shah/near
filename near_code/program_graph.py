@@ -39,7 +39,7 @@ class ProgramGraph(object):
         candidates = []
         replacement_candidates = self.dsl_dict.get((input_type, output_type),[])
         for functionclass in replacement_candidates:
-            if issubclass(functionclass, dsl.ITE):
+            if issubclass(functionclass, dsl.ITE) or issubclass(functionclass, dsl.POCITE2):
                 candidate = functionclass(input_type, output_type, input_size, output_size, num_units, beta=self.ite_beta)
             else:
                 candidate = functionclass(input_size, output_size, num_units)

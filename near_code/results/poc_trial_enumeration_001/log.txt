@@ -1,103 +1,409 @@
 INFO:root:Starting experiment poc_trial_enumeration_001
 
-INFO:root:Symbolic Synthesis: generated 5/20 symbolic programs from candidate program.
-INFO:root:Training candidate program (1/5) Start(POCAffineFunction())
-INFO:root:Epoch [1/10], Loss: 2.0030
-INFO:root:Epoch [2/10], Loss: 1.5823
-INFO:root:Epoch [3/10], Loss: 1.2328
-INFO:root:Epoch [4/10], Loss: 0.9537
-INFO:root:Epoch [5/10], Loss: 0.7426
-INFO:root:Epoch [6/10], Loss: 0.5933
-INFO:root:Epoch [7/10], Loss: 0.4963
-INFO:root:Epoch [8/10], Loss: 0.4392
-INFO:root:Epoch [9/10], Loss: 0.4092
-INFO:root:Epoch [10/10], Loss: 0.3943
-INFO:root:Validation score is: 0.3297
+INFO:root:Symbolic Synthesis: generated 15/20 symbolic programs from candidate program.
+INFO:root:Training candidate program (1/15) Start(POCAffineFunction())
+INFO:root:Epoch [1/20], Loss: 1.0827
+INFO:root:Epoch [2/20], Loss: 0.5235
+INFO:root:Epoch [3/20], Loss: 0.4241
+INFO:root:Epoch [4/20], Loss: 0.3934
+INFO:root:Epoch [5/20], Loss: 0.3638
+INFO:root:Epoch [6/20], Loss: 0.3639
+INFO:root:Epoch [7/20], Loss: 0.3822
+INFO:root:Epoch [8/20], Loss: 0.3862
+INFO:root:Epoch [9/20], Loss: 0.3770
+INFO:root:Epoch [10/20], Loss: 0.3724
+INFO:root:Epoch [11/20], Loss: 0.3744
+INFO:root:Epoch [12/20], Loss: 0.3769
+INFO:root:Epoch [13/20], Loss: 0.3768
+INFO:root:Epoch [14/20], Loss: 0.3758
+INFO:root:Epoch [15/20], Loss: 0.3757
+INFO:root:Epoch [16/20], Loss: 0.3760
+INFO:root:Epoch [17/20], Loss: 0.3762
+INFO:root:Epoch [18/20], Loss: 0.3761
+INFO:root:Epoch [19/20], Loss: 0.3761
+INFO:root:Epoch [20/20], Loss: 0.3761
+INFO:root:Validation score is: 0.3326
 INFO:root:Structural cost is 0.0 with structural penalty 0.01
-INFO:root:Time to train child 0.089
-INFO:root:Total time elapsed is: 0.089
+INFO:root:Time to train child 0.144
+INFO:root:Total time elapsed is: 0.144
 INFO:root:New BEST program found:
 INFO:root:Start(POCAffineFunction())
-INFO:root:struct_cost 0.0000 | score 0.3297 | path_cost 0.3297 | time 0.0893
-INFO:root:Training candidate program (2/5) Start(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
-INFO:root:Epoch [1/10], Loss: 0.4250
-INFO:root:Epoch [2/10], Loss: 0.3626
-INFO:root:Epoch [3/10], Loss: 0.3439
-INFO:root:Epoch [4/10], Loss: 0.3189
-INFO:root:Epoch [5/10], Loss: 0.2948
-INFO:root:Epoch [6/10], Loss: 0.2786
-INFO:root:Epoch [7/10], Loss: 0.2656
-INFO:root:Epoch [8/10], Loss: 0.2530
-INFO:root:Epoch [9/10], Loss: 0.2424
-INFO:root:Epoch [10/10], Loss: 0.2332
-INFO:root:Validation score is: 0.2360
+INFO:root:struct_cost 0.0000 | score 0.3326 | path_cost 0.3326 | time 0.1451
+INFO:root:Training candidate program (2/15) Start(POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 0.6076
+INFO:root:Epoch [2/20], Loss: 0.2567
+INFO:root:Epoch [3/20], Loss: 0.2382
+INFO:root:Epoch [4/20], Loss: 0.2124
+INFO:root:Epoch [5/20], Loss: 0.2105
+INFO:root:Epoch [6/20], Loss: 0.1858
+INFO:root:Epoch [7/20], Loss: 0.1781
+INFO:root:Epoch [8/20], Loss: 0.1811
+INFO:root:Epoch [9/20], Loss: 0.1769
+INFO:root:Epoch [10/20], Loss: 0.1743
+INFO:root:Epoch [11/20], Loss: 0.1756
+INFO:root:Epoch [12/20], Loss: 0.1738
+INFO:root:Epoch [13/20], Loss: 0.1724
+INFO:root:Epoch [14/20], Loss: 0.1716
+INFO:root:Epoch [15/20], Loss: 0.1698
+INFO:root:Epoch [16/20], Loss: 0.1682
+INFO:root:Epoch [17/20], Loss: 0.1666
+INFO:root:Epoch [18/20], Loss: 0.1647
+INFO:root:Epoch [19/20], Loss: 0.1628
+INFO:root:Epoch [20/20], Loss: 0.1605
+INFO:root:Validation score is: 0.1653
 INFO:root:Structural cost is 0.03 with structural penalty 0.01
-INFO:root:Time to train child 0.093
-INFO:root:Total time elapsed is: 0.184
+INFO:root:Time to train child 0.225
+INFO:root:Total time elapsed is: 0.372
 INFO:root:New BEST program found:
-INFO:root:Start(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
-INFO:root:struct_cost 0.0300 | score 0.2360 | path_cost 0.2660 | time 0.1857
-INFO:root:Training candidate program (3/5) Start(SimpleITE(POCAffineFunction(), POCAffineFunction(), SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction())))
-INFO:root:Epoch [1/10], Loss: 1.6495
-INFO:root:Epoch [2/10], Loss: 1.2066
-INFO:root:Epoch [3/10], Loss: 0.8588
-INFO:root:Epoch [4/10], Loss: 0.6003
-INFO:root:Epoch [5/10], Loss: 0.4229
-INFO:root:Epoch [6/10], Loss: 0.3142
-INFO:root:Epoch [7/10], Loss: 0.2590
-INFO:root:Epoch [8/10], Loss: 0.2396
-INFO:root:Epoch [9/10], Loss: 0.2389
-INFO:root:Epoch [10/10], Loss: 0.2431
-INFO:root:Validation score is: 0.2538
-INFO:root:Structural cost is 0.06 with structural penalty 0.01
-INFO:root:Time to train child 0.111
-INFO:root:Total time elapsed is: 0.304
-INFO:root:Training candidate program (4/5) Start(SimpleITE(POCAffineFunction(), SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction()))
-INFO:root:Epoch [1/10], Loss: 2.1281
-INFO:root:Epoch [2/10], Loss: 1.4647
-INFO:root:Epoch [3/10], Loss: 0.9863
-INFO:root:Epoch [4/10], Loss: 0.6848
-INFO:root:Epoch [5/10], Loss: 0.5295
-INFO:root:Epoch [6/10], Loss: 0.4692
-INFO:root:Epoch [7/10], Loss: 0.4503
-INFO:root:Epoch [8/10], Loss: 0.4365
-INFO:root:Epoch [9/10], Loss: 0.4146
-INFO:root:Epoch [10/10], Loss: 0.3865
-INFO:root:Validation score is: 0.3841
-INFO:root:Structural cost is 0.06 with structural penalty 0.01
-INFO:root:Time to train child 0.120
-INFO:root:Total time elapsed is: 0.424
-INFO:root:Training candidate program (5/5) Start(SimpleITE(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
-INFO:root:Epoch [1/10], Loss: 0.4887
-INFO:root:Epoch [2/10], Loss: 0.3012
-INFO:root:Epoch [3/10], Loss: 0.2002
-INFO:root:Epoch [4/10], Loss: 0.1656
-INFO:root:Epoch [5/10], Loss: 0.1691
-INFO:root:Epoch [6/10], Loss: 0.1793
-INFO:root:Epoch [7/10], Loss: 0.1802
-INFO:root:Epoch [8/10], Loss: 0.1735
-INFO:root:Epoch [9/10], Loss: 0.1667
-INFO:root:Epoch [10/10], Loss: 0.1629
-INFO:root:Validation score is: 0.1627
-INFO:root:Structural cost is 0.06 with structural penalty 0.01
-INFO:root:Time to train child 0.121
-INFO:root:Total time elapsed is: 0.546
+INFO:root:Start(POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:struct_cost 0.0300 | score 0.1653 | path_cost 0.1953 | time 0.3730
+INFO:root:Training candidate program (3/15) Start(POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.8005
+INFO:root:Epoch [2/20], Loss: 0.5613
+INFO:root:Epoch [3/20], Loss: 0.2605
+INFO:root:Epoch [4/20], Loss: 0.2100
+INFO:root:Epoch [5/20], Loss: 0.2271
+INFO:root:Epoch [6/20], Loss: 0.1808
+INFO:root:Epoch [7/20], Loss: 0.1595
+INFO:root:Epoch [8/20], Loss: 0.1565
+INFO:root:Epoch [9/20], Loss: 0.1579
+INFO:root:Epoch [10/20], Loss: 0.1547
+INFO:root:Epoch [11/20], Loss: 0.1560
+INFO:root:Epoch [12/20], Loss: 0.1320
+INFO:root:Epoch [13/20], Loss: 0.1330
+INFO:root:Epoch [14/20], Loss: 0.1341
+INFO:root:Epoch [15/20], Loss: 0.1361
+INFO:root:Epoch [16/20], Loss: 0.1394
+INFO:root:Epoch [17/20], Loss: 0.1407
+INFO:root:Epoch [18/20], Loss: 0.0637
+INFO:root:Epoch [19/20], Loss: 0.0633
+INFO:root:Epoch [20/20], Loss: 0.0626
+INFO:root:Validation score is: 0.1174
+INFO:root:Structural cost is 0.03 with structural penalty 0.01
+INFO:root:Time to train child 0.274
+INFO:root:Total time elapsed is: 0.652
 INFO:root:New BEST program found:
-INFO:root:Start(SimpleITE(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
-INFO:root:struct_cost 0.0600 | score 0.1627 | path_cost 0.2227 | time 0.5472
+INFO:root:Start(POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:struct_cost 0.0300 | score 0.1174 | path_cost 0.1474 | time 0.6528
+INFO:root:Training candidate program (4/15) Start(POCITE1(POCAffineFunction(), POCAffineFunction(), POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction())))
+INFO:root:Epoch [1/20], Loss: 1.1894
+INFO:root:Epoch [2/20], Loss: 0.2623
+INFO:root:Epoch [3/20], Loss: 0.2652
+INFO:root:Epoch [4/20], Loss: 0.2740
+INFO:root:Epoch [5/20], Loss: 0.2210
+INFO:root:Epoch [6/20], Loss: 0.1999
+INFO:root:Epoch [7/20], Loss: 0.1956
+INFO:root:Epoch [8/20], Loss: 0.1975
+INFO:root:Epoch [9/20], Loss: 0.1983
+INFO:root:Epoch [10/20], Loss: 0.1936
+INFO:root:Epoch [11/20], Loss: 0.1912
+INFO:root:Epoch [12/20], Loss: 0.1913
+INFO:root:Epoch [13/20], Loss: 0.1918
+INFO:root:Epoch [14/20], Loss: 0.1908
+INFO:root:Epoch [15/20], Loss: 0.1897
+INFO:root:Epoch [16/20], Loss: 0.1890
+INFO:root:Epoch [17/20], Loss: 0.1881
+INFO:root:Epoch [18/20], Loss: 0.1866
+INFO:root:Epoch [19/20], Loss: 0.1849
+INFO:root:Epoch [20/20], Loss: 0.1830
+INFO:root:Validation score is: 0.1889
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.329
+INFO:root:Total time elapsed is: 0.985
+INFO:root:Training candidate program (5/15) Start(POCITE1(POCAffineFunction(), POCAffineFunction(), POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction())))
+INFO:root:Epoch [1/20], Loss: 0.5259
+INFO:root:Epoch [2/20], Loss: 0.3642
+INFO:root:Epoch [3/20], Loss: 0.3363
+INFO:root:Epoch [4/20], Loss: 0.2066
+INFO:root:Epoch [5/20], Loss: 0.1759
+INFO:root:Epoch [6/20], Loss: 0.1819
+INFO:root:Epoch [7/20], Loss: 0.1804
+INFO:root:Epoch [8/20], Loss: 0.1463
+INFO:root:Epoch [9/20], Loss: 0.1485
+INFO:root:Epoch [10/20], Loss: 0.1475
+INFO:root:Epoch [11/20], Loss: 0.1489
+INFO:root:Epoch [12/20], Loss: 0.1521
+INFO:root:Epoch [13/20], Loss: 0.1536
+INFO:root:Epoch [14/20], Loss: 0.1295
+INFO:root:Epoch [15/20], Loss: 0.1320
+INFO:root:Epoch [16/20], Loss: 0.1345
+INFO:root:Epoch [17/20], Loss: 0.0609
+INFO:root:Epoch [18/20], Loss: 0.0596
+INFO:root:Epoch [19/20], Loss: 0.0585
+INFO:root:Epoch [20/20], Loss: 0.0073
+INFO:root:Validation score is: 0.0916
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.344
+INFO:root:Total time elapsed is: 1.330
+INFO:root:Training candidate program (6/15) Start(POCITE1(POCAffineFunction(), POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.3168
+INFO:root:Epoch [2/20], Loss: 0.4358
+INFO:root:Epoch [3/20], Loss: 0.3545
+INFO:root:Epoch [4/20], Loss: 0.3682
+INFO:root:Epoch [5/20], Loss: 0.2926
+INFO:root:Epoch [6/20], Loss: 0.2485
+INFO:root:Epoch [7/20], Loss: 0.2208
+INFO:root:Epoch [8/20], Loss: 0.2035
+INFO:root:Epoch [9/20], Loss: 0.1900
+INFO:root:Epoch [10/20], Loss: 0.1842
+INFO:root:Epoch [11/20], Loss: 0.1824
+INFO:root:Epoch [12/20], Loss: 0.1809
+INFO:root:Epoch [13/20], Loss: 0.1795
+INFO:root:Epoch [14/20], Loss: 0.1775
+INFO:root:Epoch [15/20], Loss: 0.1744
+INFO:root:Epoch [16/20], Loss: 0.1709
+INFO:root:Epoch [17/20], Loss: 0.1667
+INFO:root:Epoch [18/20], Loss: 0.1627
+INFO:root:Epoch [19/20], Loss: 0.1586
+INFO:root:Epoch [20/20], Loss: 0.1545
+INFO:root:Validation score is: 0.1482
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.350
+INFO:root:Total time elapsed is: 1.680
+INFO:root:Training candidate program (7/15) Start(POCITE1(POCAffineFunction(), POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.9688
+INFO:root:Epoch [2/20], Loss: 0.8578
+INFO:root:Epoch [3/20], Loss: 0.4414
+INFO:root:Epoch [4/20], Loss: 0.4191
+INFO:root:Epoch [5/20], Loss: 0.4065
+INFO:root:Epoch [6/20], Loss: 0.3522
+INFO:root:Epoch [7/20], Loss: 0.3132
+INFO:root:Epoch [8/20], Loss: 0.2828
+INFO:root:Epoch [9/20], Loss: 0.2527
+INFO:root:Epoch [10/20], Loss: 0.2293
+INFO:root:Epoch [11/20], Loss: 0.2122
+INFO:root:Epoch [12/20], Loss: 0.1977
+INFO:root:Epoch [13/20], Loss: 0.1853
+INFO:root:Epoch [14/20], Loss: 0.1760
+INFO:root:Epoch [15/20], Loss: 0.1682
+INFO:root:Epoch [16/20], Loss: 0.1606
+INFO:root:Epoch [17/20], Loss: 0.1533
+INFO:root:Epoch [18/20], Loss: 0.1471
+INFO:root:Epoch [19/20], Loss: 0.1420
+INFO:root:Epoch [20/20], Loss: 0.1378
+INFO:root:Validation score is: 0.1406
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.367
+INFO:root:Total time elapsed is: 2.047
+INFO:root:Training candidate program (8/15) Start(POCITE1(POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.6166
+INFO:root:Epoch [2/20], Loss: 0.6894
+INFO:root:Epoch [3/20], Loss: 0.3475
+INFO:root:Epoch [4/20], Loss: 0.3055
+INFO:root:Epoch [5/20], Loss: 0.3310
+INFO:root:Epoch [6/20], Loss: 0.2928
+INFO:root:Epoch [7/20], Loss: 0.2407
+INFO:root:Epoch [8/20], Loss: 0.2127
+INFO:root:Epoch [9/20], Loss: 0.1976
+INFO:root:Epoch [10/20], Loss: 0.1903
+INFO:root:Epoch [11/20], Loss: 0.1843
+INFO:root:Epoch [12/20], Loss: 0.1796
+INFO:root:Epoch [13/20], Loss: 0.1772
+INFO:root:Epoch [14/20], Loss: 0.1756
+INFO:root:Epoch [15/20], Loss: 0.1739
+INFO:root:Epoch [16/20], Loss: 0.1723
+INFO:root:Epoch [17/20], Loss: 0.1705
+INFO:root:Epoch [18/20], Loss: 0.1685
+INFO:root:Epoch [19/20], Loss: 0.1661
+INFO:root:Epoch [20/20], Loss: 0.1632
+INFO:root:Validation score is: 0.1748
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.325
+INFO:root:Total time elapsed is: 2.372
+INFO:root:Training candidate program (9/15) Start(POCITE1(POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 0.5806
+INFO:root:Epoch [2/20], Loss: 0.2929
+INFO:root:Epoch [3/20], Loss: 0.2302
+INFO:root:Epoch [4/20], Loss: 0.2255
+INFO:root:Epoch [5/20], Loss: 0.2012
+INFO:root:Epoch [6/20], Loss: 0.1911
+INFO:root:Epoch [7/20], Loss: 0.1948
+INFO:root:Epoch [8/20], Loss: 0.1930
+INFO:root:Epoch [9/20], Loss: 0.1931
+INFO:root:Epoch [10/20], Loss: 0.1938
+INFO:root:Epoch [11/20], Loss: 0.1935
+INFO:root:Epoch [12/20], Loss: 0.1920
+INFO:root:Epoch [13/20], Loss: 0.1920
+INFO:root:Epoch [14/20], Loss: 0.1911
+INFO:root:Epoch [15/20], Loss: 0.1848
+INFO:root:Epoch [16/20], Loss: 0.1829
+INFO:root:Epoch [17/20], Loss: 0.1818
+INFO:root:Epoch [18/20], Loss: 0.1751
+INFO:root:Epoch [19/20], Loss: 0.1690
+INFO:root:Epoch [20/20], Loss: 0.1563
+INFO:root:Validation score is: 0.1424
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.364
+INFO:root:Total time elapsed is: 2.737
+INFO:root:Training candidate program (10/15) Start(POCITE2(POCAffineFunction(), POCAffineFunction(), POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction())))
+INFO:root:Epoch [1/20], Loss: 1.1902
+INFO:root:Epoch [2/20], Loss: 0.4410
+INFO:root:Epoch [3/20], Loss: 0.2128
+INFO:root:Epoch [4/20], Loss: 0.2608
+INFO:root:Epoch [5/20], Loss: 0.2482
+INFO:root:Epoch [6/20], Loss: 0.1532
+INFO:root:Epoch [7/20], Loss: 0.1448
+INFO:root:Epoch [8/20], Loss: 0.2001
+INFO:root:Epoch [9/20], Loss: 0.1954
+INFO:root:Epoch [10/20], Loss: 0.1903
+INFO:root:Epoch [11/20], Loss: 0.1715
+INFO:root:Epoch [12/20], Loss: 0.1660
+INFO:root:Epoch [13/20], Loss: 0.1683
+INFO:root:Epoch [14/20], Loss: 0.1573
+INFO:root:Epoch [15/20], Loss: 0.1447
+INFO:root:Epoch [16/20], Loss: 0.1449
+INFO:root:Epoch [17/20], Loss: 0.1453
+INFO:root:Epoch [18/20], Loss: 0.1461
+INFO:root:Epoch [19/20], Loss: 0.1473
+INFO:root:Epoch [20/20], Loss: 0.1480
+INFO:root:Validation score is: 0.1562
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.362
+INFO:root:Total time elapsed is: 3.099
+INFO:root:Training candidate program (11/15) Start(POCITE2(POCAffineFunction(), POCAffineFunction(), POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction())))
+INFO:root:Epoch [1/20], Loss: 3.0472
+INFO:root:Epoch [2/20], Loss: 1.4374
+INFO:root:Epoch [3/20], Loss: 0.4028
+INFO:root:Epoch [4/20], Loss: 0.2554
+INFO:root:Epoch [5/20], Loss: 0.2021
+INFO:root:Epoch [6/20], Loss: 0.2188
+INFO:root:Epoch [7/20], Loss: 0.2167
+INFO:root:Epoch [8/20], Loss: 0.1974
+INFO:root:Epoch [9/20], Loss: 0.1869
+INFO:root:Epoch [10/20], Loss: 0.1835
+INFO:root:Epoch [11/20], Loss: 0.1831
+INFO:root:Epoch [12/20], Loss: 0.1841
+INFO:root:Epoch [13/20], Loss: 0.1848
+INFO:root:Epoch [14/20], Loss: 0.1842
+INFO:root:Epoch [15/20], Loss: 0.1831
+INFO:root:Epoch [16/20], Loss: 0.1730
+INFO:root:Epoch [17/20], Loss: 0.1730
+INFO:root:Epoch [18/20], Loss: 0.1733
+INFO:root:Epoch [19/20], Loss: 0.1683
+INFO:root:Epoch [20/20], Loss: 0.1684
+INFO:root:Validation score is: 0.1705
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.321
+INFO:root:Total time elapsed is: 3.420
+INFO:root:Training candidate program (12/15) Start(POCITE2(POCAffineFunction(), POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.0481
+INFO:root:Epoch [2/20], Loss: 0.3452
+INFO:root:Epoch [3/20], Loss: 0.3893
+INFO:root:Epoch [4/20], Loss: 0.3225
+INFO:root:Epoch [5/20], Loss: 0.2528
+INFO:root:Epoch [6/20], Loss: 0.2109
+INFO:root:Epoch [7/20], Loss: 0.1922
+INFO:root:Epoch [8/20], Loss: 0.1784
+INFO:root:Epoch [9/20], Loss: 0.1726
+INFO:root:Epoch [10/20], Loss: 0.1709
+INFO:root:Epoch [11/20], Loss: 0.1691
+INFO:root:Epoch [12/20], Loss: 0.1672
+INFO:root:Epoch [13/20], Loss: 0.1645
+INFO:root:Epoch [14/20], Loss: 0.1612
+INFO:root:Epoch [15/20], Loss: 0.1580
+INFO:root:Epoch [16/20], Loss: 0.1550
+INFO:root:Epoch [17/20], Loss: 0.1520
+INFO:root:Epoch [18/20], Loss: 0.1490
+INFO:root:Epoch [19/20], Loss: 0.1458
+INFO:root:Epoch [20/20], Loss: 0.1423
+INFO:root:Validation score is: 0.1462
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.363
+INFO:root:Total time elapsed is: 3.782
+INFO:root:Training candidate program (13/15) Start(POCITE2(POCAffineFunction(), POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 2.7386
+INFO:root:Epoch [2/20], Loss: 1.0500
+INFO:root:Epoch [3/20], Loss: 0.3467
+INFO:root:Epoch [4/20], Loss: 0.2608
+INFO:root:Epoch [5/20], Loss: 0.2185
+INFO:root:Epoch [6/20], Loss: 0.1249
+INFO:root:Epoch [7/20], Loss: 0.1450
+INFO:root:Epoch [8/20], Loss: 0.1665
+INFO:root:Epoch [9/20], Loss: 0.0798
+INFO:root:Epoch [10/20], Loss: 0.0796
+INFO:root:Epoch [11/20], Loss: 0.1550
+INFO:root:Epoch [12/20], Loss: 0.1536
+INFO:root:Epoch [13/20], Loss: 0.0864
+INFO:root:Epoch [14/20], Loss: 0.1489
+INFO:root:Epoch [15/20], Loss: 0.1461
+INFO:root:Epoch [16/20], Loss: 0.1779
+INFO:root:Epoch [17/20], Loss: 0.1760
+INFO:root:Epoch [18/20], Loss: 0.1734
+INFO:root:Epoch [19/20], Loss: 0.1726
+INFO:root:Epoch [20/20], Loss: 0.1721
+INFO:root:Validation score is: 0.1553
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.365
+INFO:root:Total time elapsed is: 4.148
+INFO:root:Training candidate program (14/15) Start(POCITE2(POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 1.2440
+INFO:root:Epoch [2/20], Loss: 0.4768
+INFO:root:Epoch [3/20], Loss: 0.3629
+INFO:root:Epoch [4/20], Loss: 0.3735
+INFO:root:Epoch [5/20], Loss: 0.3884
+INFO:root:Epoch [6/20], Loss: 0.2954
+INFO:root:Epoch [7/20], Loss: 0.2175
+INFO:root:Epoch [8/20], Loss: 0.2223
+INFO:root:Epoch [9/20], Loss: 0.2199
+INFO:root:Epoch [10/20], Loss: 0.2056
+INFO:root:Epoch [11/20], Loss: 0.2010
+INFO:root:Epoch [12/20], Loss: 0.1998
+INFO:root:Epoch [13/20], Loss: 0.1973
+INFO:root:Epoch [14/20], Loss: 0.1975
+INFO:root:Epoch [15/20], Loss: 0.1960
+INFO:root:Epoch [16/20], Loss: 0.1975
+INFO:root:Epoch [17/20], Loss: 0.2150
+INFO:root:Epoch [18/20], Loss: 0.2000
+INFO:root:Epoch [19/20], Loss: 0.2011
+INFO:root:Epoch [20/20], Loss: 0.2105
+INFO:root:Validation score is: 0.2085
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.400
+INFO:root:Total time elapsed is: 4.548
+INFO:root:Training candidate program (15/15) Start(POCITE2(POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
+INFO:root:Epoch [1/20], Loss: 2.7451
+INFO:root:Epoch [2/20], Loss: 1.3369
+INFO:root:Epoch [3/20], Loss: 0.5923
+INFO:root:Epoch [4/20], Loss: 0.4056
+INFO:root:Epoch [5/20], Loss: 0.3647
+INFO:root:Epoch [6/20], Loss: 0.3637
+INFO:root:Epoch [7/20], Loss: 0.3666
+INFO:root:Epoch [8/20], Loss: 0.3616
+INFO:root:Epoch [9/20], Loss: 0.3470
+INFO:root:Epoch [10/20], Loss: 0.3178
+INFO:root:Epoch [11/20], Loss: 0.2608
+INFO:root:Epoch [12/20], Loss: 0.2205
+INFO:root:Epoch [13/20], Loss: 0.0957
+INFO:root:Epoch [14/20], Loss: 0.1484
+INFO:root:Epoch [15/20], Loss: 0.1841
+INFO:root:Epoch [16/20], Loss: 0.0761
+INFO:root:Epoch [17/20], Loss: 0.0714
+INFO:root:Epoch [18/20], Loss: 0.0625
+INFO:root:Epoch [19/20], Loss: 0.0566
+INFO:root:Epoch [20/20], Loss: 0.0541
+INFO:root:Validation score is: 0.1967
+INFO:root:Structural cost is 0.06 with structural penalty 0.01
+INFO:root:Time to train child 0.333
+INFO:root:Total time elapsed is: 4.881
 INFO:root:
 
 INFO:root:BEST programs found:
 INFO:root:Start(POCAffineFunction())
-INFO:root:struct_cost 0.0000 | score 0.3297 | path_cost 0.3297 | time 0.0893
-INFO:root:Start(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
-INFO:root:struct_cost 0.0300 | score 0.2360 | path_cost 0.2660 | time 0.1857
-INFO:root:Start(SimpleITE(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction()))
-INFO:root:struct_cost 0.0600 | score 0.1627 | path_cost 0.2227 | time 0.5472
+INFO:root:struct_cost 0.0000 | score 0.3326 | path_cost 0.3326 | time 0.1451
+INFO:root:Start(POCITE1(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:struct_cost 0.0300 | score 0.1653 | path_cost 0.1953 | time 0.3730
+INFO:root:Start(POCITE2(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()))
+INFO:root:struct_cost 0.0300 | score 0.1174 | path_cost 0.1474 | time 0.6528
 INFO:root:
 
-INFO:root:Evaluating program Start(SimpleITE(SimpleITE(POCAffineFunction(), POCAffineFunction(), POCAffineFunction()), POCAffineFunction(), POCAffineFunction())) on TEST SET
-INFO:root:Metric (MSE) achieved is 0.1446
+INFO:root:Evaluating program Start(POCITE2(POCAffineFunction(params: dict_values([Parameter containing:
+tensor([[-2.4712]], requires_grad=True), Parameter containing:
+tensor([-1.1234], requires_grad=True)])), POCAffineFunction(params: dict_values([Parameter containing:
+tensor([[0.5137]], requires_grad=True), Parameter containing:
+tensor([1.1485], requires_grad=True)])), POCAffineFunction(params: dict_values([Parameter containing:
+tensor([[1.1549]], requires_grad=True), Parameter containing:
+tensor([-0.0788], requires_grad=True)])))) on TEST SET
+INFO:root:Metric (MSE) achieved is 0.0106
 INFO:root:ALGORITHM END 
 
 
